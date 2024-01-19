@@ -1,6 +1,6 @@
 import os
 
-ensemble = True
+ensemble = False
 
 
 #get RIFE_HDv3.py file as list

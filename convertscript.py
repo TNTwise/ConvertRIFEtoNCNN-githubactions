@@ -16,13 +16,13 @@ os.system('cp -r Practical-RIFE/* .')
 os.system('sudo apt install python3-pip -y')
 
 try:
-    os.system('pip install onnxsim onnxconverter_common torch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 --break-system-packages')
+    os.system('pip install onnxsim onnxconverter_common torch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1 -y')
 except:
     os.system('pip install onnxsim onnxconverter_common torch==1.10.1 torchvision==0.11.2 torchaudio==0.10.1')
 os.system('wget https://raw.githubusercontent.com/TNTwise/Rife-NCNN-Model-Comparisons/c053eaf9b51fa07467954d4d8ed1cf752b1fd68b/0.png && wget https://raw.githubusercontent.com/TNTwise/Rife-NCNN-Model-Comparisons/c053eaf9b51fa07467954d4d8ed1cf752b1fd68b/2.png')
 
 try:
-    os.system('pip install -r requirements.txt --break-system-packages')
+    os.system('pip install -r requirements.txt -y')
 except:
     os.system('pip install -r requirements.txt')
 os.system('python3 modify_train_log.py')

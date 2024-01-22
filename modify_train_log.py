@@ -41,11 +41,14 @@ def modify_rife_hd():
             if 'pnnx' in returnValue('conversion_method'):
                 line = line.replace('flow, mask, merged = self.flownet(imgs, timestep, scale_list)', '''mod = torch.jit.trace(self.flownet,(torch.rand(1, 3, 256, 256),torch.rand(1, 3, 256, 256), torch.Tensor([1])))''')
 
-        if 'return merged[3]' in line:
+        if 'return merged' in line:
+            import re
+            global return_merged_num
+            return_merged_num = int(re.search(r'\d+', line).group())
             if onnx:
-                line = line.replace('return merged[3]','exit()')
+                line = line.replace(f'return merged[{return_merged_num}]','exit()')
             if pnnx:
-                line = line.replace('return merged[3]','mod.save("rife.pt")')
+                line = line.replace(f'return merged[{return_merged_num}]','mod.save("rife.pt")')
         modified_RIFE_HD_FILE.append(line)
         
     try:
@@ -97,8 +100,8 @@ def modify_ifnet_hd():
         if 'warped_img1 = warp(img1, flow[:, 2:4])' in line:
             line = line.replace('warped_img1 = warp(img1, flow[:, 2:4])','warped_img1 = img1**flow[:,1:4]')
         
-        if 'return flow_list, mask_list[3], merged' in line:
-            line = line.replace('return flow_list, mask_list[3], merged', 'return merged[3]')
+        if 'return flow_list, mask_list' in line:
+            line = line.replace(f'return flow_list, mask_list[{return_merged_num}], merged', f'return merged[{return_merged_num}]')
         
         modified_IFNet_HD_FILE.append(line)
     with open('train_log_export/IFNet_HDv3.py', 'w') as f:

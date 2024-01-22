@@ -69,7 +69,10 @@ def modify_ifnet_hd():
             
             line = line.replace(f'def forward(self, x, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):',
                                 f'def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble={returnValue("ensemble")}):')
-            
+        
+        if 'def forward(self, x, scale_list=[4, 2, 1], training=False, ada_scale=True, ensemble=False):' in line:
+            line = line.replace(f'def forward(self, x, scale_list=[4, 2, 1], training=False, ada_scale=True, ensemble=False):',
+                                f'def forward(self, img0,img1, scale_list=[4, 2, 1], training=False, ada_scale=True, ensemble={returnValue("ensemble")}):')
         
         if 'if training == False:' in line:
             line=line.replace('if training == False:','if training == True:')

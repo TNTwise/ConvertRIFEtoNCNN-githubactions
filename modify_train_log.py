@@ -1,7 +1,12 @@
 import os
+from readConfig import returnValue
 
-ensemble = False
-
+if 'onnx' in returnValue('conversion_method'):
+    onnx=True
+    pnnx=False
+if 'pnnx' in returnValue('conversion_method'):
+    pnnx=True
+    onnx=False
 
 #get RIFE_HDv3.py file as list
 try:
@@ -23,7 +28,9 @@ def modify_rife_hd():
 
     for line in RIFE_HD_FILE:
         if 'flow, mask, merged = self.flownet(imgs, timestep, scale_list)' in line:
-            line = line.replace('flow, mask, merged = self.flownet(imgs, timestep, scale_list)', '''torch.onnx.export(
+            if onnx==True:
+            
+                line = line.replace('flow, mask, merged = self.flownet(imgs, timestep, scale_list)', '''torch.onnx.export(
     self.flownet,
     (torch.rand(1, 3, 256, 256),torch.rand(1, 3, 256, 256), torch.Tensor([0.5])),
     "rife.onnx",
@@ -31,8 +38,14 @@ def modify_rife_hd():
     opset_version=11,
     input_names=["in0", "in1", "in2"],
     output_names=["out0"],)''')
+            if 'pnnx' in returnValue('conversion_method'):
+                line = line.replace('flow, mask, merged = self.flownet(imgs, timestep, scale_list)', '''mod = torch.jit.trace(self.flownet,(torch.rand(1, 3, 256, 256),torch.rand(1, 3, 256, 256), torch.Tensor([1])))''')
+
         if 'return merged[3]' in line:
-            line = line.replace('return merged[3]','exit()')
+            if onnx:
+                line = line.replace('return merged[3]','exit()')
+            if pnnx:
+                line = line.replace('return merged[3]','mod.save("rife.pt")')
         modified_RIFE_HD_FILE.append(line)
         
     try:
@@ -52,7 +65,7 @@ def modify_ifnet_hd():
         if 'def forward(self, x, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):' in line:
             
             line = line.replace(f'def forward(self, x, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):',
-                                f'def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble={ensemble}):')
+                                f'def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble={returnValue("ensemble")}):')
             
         
         if 'if training == False:' in line:

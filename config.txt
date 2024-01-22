@@ -1,0 +1,3 @@
+fp16=True
+ensemble=False
+conversion_method=pnnx

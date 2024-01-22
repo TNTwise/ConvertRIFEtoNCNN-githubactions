@@ -1,0 +1,698 @@
+7767517
+696 699
+pnnx.Input               pnnx_input_0             0 1 img0.1 #img0.1=(1,3,256,256)f32
+pnnx.Input               pnnx_input_1             0 1 img1.1 #img1.1=(1,3,256,256)f32
+pnnx.Input               pnnx_input_2             0 1 timestep.1 #timestep.1=(1)f32
+prim::Constant           pnnx_1                   0 1 31 value=1
+prim::Constant           pnnx_2                   0 1 29 value=0
+prim::Constant           pnnx_4                   0 1 17 value=1
+prim::Constant           pnnx_5                   0 1 19 value=0
+prim::Constant           pnnx_6                   0 1 20 value=2147483647
+prim::Constant           pnnx_8                   0 1 46 value=3
+prim::Constant           pnnx_9                   0 1 98 value=4
+prim::Constant           pnnx_10                  0 1 107 value=2
+prim::ListConstruct      pnnx_11                  2 1 img0.1 img1.1 16 #img0.1=(1,3,256,256)f32 #img1.1=(1,3,256,256)f32
+prim::Constant           pnnx_13                  0 1 792 value=0
+prim::Constant           pnnx_14                  0 1 793 value=1
+prim::Constant           pnnx_16                  0 1 794 value=1
+prim::Constant           pnnx_17                  0 1 795 value=0
+prim::Constant           pnnx_18                  0 1 796 value=1
+prim::Constant           pnnx_19                  0 1 797 value=1
+torch.cat                torch.cat_79             2 1 16 17 18 $tensors=16 $dim=17 #18=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_12          5 1 18 19 792 20 793 22 $input=18 $dim=19 $start=792 $end=20 $step=793 #18=(1,6,256,256)f32 #22=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_13          5 1 22 794 795 796 797 25 $input=22 $dim=794 $start=795 $end=796 $step=797 #22=(1,6,256,256)f32 #25=(1,1,256,256)f32
+torch.clone              torch.clone_87           1 1 25 27 memory_format=torch.contiguous_format $input=25 #25=(1,1,256,256)f32 #27=(1,1,256,256)f32
+aten::mul                pnnx_22                  2 1 27 29 30 #27=(1,1,256,256)f32 #30=(1,1,256,256)f32
+prim::Constant           pnnx_23                  0 1 798 value=1
+aten::add                pnnx_24                  3 1 30 31 798 33 #30=(1,1,256,256)f32 #33=(1,1,256,256)f32
+aten::mul                pnnx_25                  2 1 33 timestep.1 36 #33=(1,1,256,256)f32 #timestep.1=(1)f32 #36=(1,1,256,256)f32
+prim::Constant           pnnx_29                  0 1 801 value=0
+prim::Constant           pnnx_30                  0 1 802 value=0
+prim::Constant           pnnx_31                  0 1 803 value=2147483647
+prim::Constant           pnnx_32                  0 1 804 value=1
+prim::Constant           pnnx_34                  0 1 805 value=1
+prim::Constant           pnnx_35                  0 1 806 value=0
+prim::Constant           pnnx_36                  0 1 807 value=1
+Tensor.slice             Tensor.slice_14          5 1 img0.1 801 802 803 804 44 $input=img0.1 $dim=801 $start=802 $end=803 $step=804 #img0.1=(1,3,256,256)f32 #44=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_15          5 1 44 805 806 46 807 input.3 $input=44 $dim=805 $start=806 $end=46 $step=807 #44=(1,3,256,256)f32 #input.3=(1,3,256,256)f32
+nn.Conv2d                encode.cnn0              1 1 input.3 317 bias=True dilation=(1,1) groups=1 in_channels=3 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(32)f32 @weight=(32,3,3,3)f32 #input.3=(1,3,256,256)f32 #317=(1,32,128,128)f32
+nn.LeakyReLU             encode.relu              1 1 317 318 negative_slope=2.000000e-01 #317=(1,32,128,128)f32 #318=(1,32,128,128)f32
+nn.Conv2d                encode.cnn1              1 1 318 319 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(32)f32 @weight=(32,32,3,3)f32 #318=(1,32,128,128)f32 #319=(1,32,128,128)f32
+nn.LeakyReLU             encode.relu              1 1 319 320 negative_slope=2.000000e-01 #319=(1,32,128,128)f32 #320=(1,32,128,128)f32
+nn.Conv2d                encode.cnn2              1 1 320 321 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(32)f32 @weight=(32,32,3,3)f32 #320=(1,32,128,128)f32 #321=(1,32,128,128)f32
+nn.LeakyReLU             encode.relu              1 1 321 322 negative_slope=2.000000e-01 #321=(1,32,128,128)f32 #322=(1,32,128,128)f32
+nn.ConvTranspose2d       encode.cnn3              1 1 322 323 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(4,4) out_channels=8 output_padding=(0,0) padding=(1,1) stride=(2,2) @bias=(8)f32 @weight=(32,8,4,4)f32 #322=(1,32,128,128)f32 #323=(1,8,256,256)f32
+prim::Constant           pnnx_38                  0 1 808 value=0
+prim::Constant           pnnx_39                  0 1 809 value=0
+prim::Constant           pnnx_40                  0 1 810 value=2147483647
+prim::Constant           pnnx_41                  0 1 811 value=1
+prim::Constant           pnnx_43                  0 1 812 value=1
+prim::Constant           pnnx_44                  0 1 813 value=0
+prim::Constant           pnnx_45                  0 1 814 value=3
+prim::Constant           pnnx_46                  0 1 815 value=1
+Tensor.slice             Tensor.slice_16          5 1 img1.1 808 809 810 811 54 $input=img1.1 $dim=808 $start=809 $end=810 $step=811 #img1.1=(1,3,256,256)f32 #54=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_17          5 1 54 812 813 814 815 input0.3 $input=54 $dim=812 $start=813 $end=814 $step=815 #54=(1,3,256,256)f32 #input0.3=(1,3,256,256)f32
+nn.Conv2d                encode.cnn0              1 1 input0.3 329 bias=True dilation=(1,1) groups=1 in_channels=3 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(32)f32 @weight=(32,3,3,3)f32 #input0.3=(1,3,256,256)f32 #329=(1,32,128,128)f32
+nn.LeakyReLU             encode.relu              1 1 329 330 negative_slope=2.000000e-01 #329=(1,32,128,128)f32 #330=(1,32,128,128)f32
+nn.Conv2d                encode.cnn1              1 1 330 331 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(32)f32 @weight=(32,32,3,3)f32 #330=(1,32,128,128)f32 #331=(1,32,128,128)f32
+nn.LeakyReLU             encode.relu              1 1 331 332 negative_slope=2.000000e-01 #331=(1,32,128,128)f32 #332=(1,32,128,128)f32
+nn.Conv2d                encode.cnn2              1 1 332 333 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(32)f32 @weight=(32,32,3,3)f32 #332=(1,32,128,128)f32 #333=(1,32,128,128)f32
+nn.LeakyReLU             encode.relu              1 1 333 334 negative_slope=2.000000e-01 #333=(1,32,128,128)f32 #334=(1,32,128,128)f32
+nn.ConvTranspose2d       encode.cnn3              1 1 334 335 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(4,4) out_channels=8 output_padding=(0,0) padding=(1,1) stride=(2,2) @bias=(8)f32 @weight=(32,8,4,4)f32 #334=(1,32,128,128)f32 #335=(1,8,256,256)f32
+prim::Constant           pnnx_48                  0 1 816 value=0
+prim::Constant           pnnx_49                  0 1 817 value=0
+prim::Constant           pnnx_50                  0 1 818 value=2147483647
+prim::Constant           pnnx_51                  0 1 819 value=1
+prim::Constant           pnnx_53                  0 1 820 value=1
+prim::Constant           pnnx_54                  0 1 821 value=0
+prim::Constant           pnnx_55                  0 1 822 value=3
+prim::Constant           pnnx_56                  0 1 823 value=1
+prim::Constant           pnnx_58                  0 1 824 value=0
+prim::Constant           pnnx_59                  0 1 825 value=0
+prim::Constant           pnnx_60                  0 1 826 value=2147483647
+prim::Constant           pnnx_61                  0 1 827 value=1
+prim::Constant           pnnx_63                  0 1 828 value=1
+prim::Constant           pnnx_64                  0 1 829 value=0
+prim::Constant           pnnx_65                  0 1 830 value=3
+prim::Constant           pnnx_66                  0 1 831 value=1
+Tensor.slice             Tensor.slice_20          5 1 img1.1 824 825 826 827 69 $input=img1.1 $dim=824 $start=825 $end=826 $step=827 #img1.1=(1,3,256,256)f32 #69=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_21          5 1 69 828 829 830 831 73 $input=69 $dim=828 $start=829 $end=830 $step=831 #69=(1,3,256,256)f32 #73=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_18          5 1 img0.1 816 817 818 819 63 $input=img0.1 $dim=816 $start=817 $end=818 $step=819 #img0.1=(1,3,256,256)f32 #63=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_19          5 1 63 820 821 822 823 66 $input=63 $dim=820 $start=821 $end=822 $step=823 #63=(1,3,256,256)f32 #66=(1,3,256,256)f32
+Tensor.to                Tensor.to_78             1 1 36 timestep0.1 copy=False dtype=torch.float $input=36 #36=(1,1,256,256)f32 #timestep0.1=(1,1,256,256)f32
+prim::ListConstruct      pnnx_68                  5 1 66 73 323 335 timestep0.1 77 #66=(1,3,256,256)f32 #73=(1,3,256,256)f32 #323=(1,8,256,256)f32 #335=(1,8,256,256)f32 #timestep0.1=(1,1,256,256)f32
+prim::Constant           pnnx_69                  0 1 832 value=1
+prim::Constant           pnnx_71                  0 1 336 value=8
+prim::Constant           pnnx_74                  0 1 339 value=1.250000e-01
+prim::Constant           pnnx_75                  0 1 340 value=8.000000e+00
+prim::Constant           pnnx_76                  0 1 341 value=0
+prim::Constant           pnnx_77                  0 1 342 value=2147483647
+prim::Constant           pnnx_78                  0 1 343 value=1
+prim::Constant           pnnx_79                  0 1 344 value=4
+prim::Constant           pnnx_80                  0 1 345 value=5
+prim::Constant           pnnx_81                  0 1 833 value=1.250000e-01
+prim::ListConstruct      pnnx_82                  2 1 339 833 349
+torch.cat                torch.cat_80             2 1 77 832 input1.1 $tensors=77 $dim=832 #input1.1=(1,23,256,256)f32
+F.upsample               F.upsample_1             2 1 input1.1 349 input5.1 align_corners=False mode=bilinear $input=input1.1 $scale_factor=349 #input1.1=(1,23,256,256)f32 #input5.1=(1,23,32,32)f32
+nn.Conv2d                block0.conv0.0.0         1 1 input5.1 355 bias=True dilation=(1,1) groups=1 in_channels=23 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(96)f32 @weight=(96,23,3,3)f32 #input5.1=(1,23,32,32)f32 #355=(1,96,16,16)f32
+nn.LeakyReLU             block0.conv0.0.1         1 1 355 356 negative_slope=2.000000e-01 #355=(1,96,16,16)f32 #356=(1,96,16,16)f32
+nn.Conv2d                block0.conv0.1.0         1 1 356 359 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(192)f32 @weight=(192,96,3,3)f32 #356=(1,96,16,16)f32 #359=(1,192,8,8)f32
+nn.LeakyReLU             block0.conv0.1.1         1 1 359 360 negative_slope=2.000000e-01 #359=(1,192,8,8)f32 #360=(1,192,8,8)f32
+prim::Constant           pnnx_84                  0 1 369 value=1
+pnnx.Attribute           block0.convblock.0       0 1 beta.3 @data=(1,192,1,1)f32 #beta.3=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.0.conv  1 1 360 373 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #360=(1,192,8,8)f32 #373=(1,192,8,8)f32
+aten::mul                pnnx_85                  2 1 373 beta.3 374 #373=(1,192,8,8)f32 #beta.3=(1,192,1,1)f32 #374=(1,192,8,8)f32
+aten::add                pnnx_86                  3 1 374 360 369 input.5 #374=(1,192,8,8)f32 #360=(1,192,8,8)f32 #input.5=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.0.relu  1 1 input.5 376 negative_slope=2.000000e-01 #input.5=(1,192,8,8)f32 #376=(1,192,8,8)f32
+prim::Constant           pnnx_87                  0 1 377 value=1
+pnnx.Attribute           block0.convblock.1       0 1 beta.5 @data=(1,192,1,1)f32 #beta.5=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.1.conv  1 1 376 381 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #376=(1,192,8,8)f32 #381=(1,192,8,8)f32
+aten::mul                pnnx_88                  2 1 381 beta.5 382 #381=(1,192,8,8)f32 #beta.5=(1,192,1,1)f32 #382=(1,192,8,8)f32
+aten::add                pnnx_89                  3 1 382 376 377 input.7 #382=(1,192,8,8)f32 #376=(1,192,8,8)f32 #input.7=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.1.relu  1 1 input.7 384 negative_slope=2.000000e-01 #input.7=(1,192,8,8)f32 #384=(1,192,8,8)f32
+prim::Constant           pnnx_90                  0 1 385 value=1
+pnnx.Attribute           block0.convblock.2       0 1 beta.7 @data=(1,192,1,1)f32 #beta.7=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.2.conv  1 1 384 389 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #384=(1,192,8,8)f32 #389=(1,192,8,8)f32
+aten::mul                pnnx_91                  2 1 389 beta.7 390 #389=(1,192,8,8)f32 #beta.7=(1,192,1,1)f32 #390=(1,192,8,8)f32
+aten::add                pnnx_92                  3 1 390 384 385 input.9 #390=(1,192,8,8)f32 #384=(1,192,8,8)f32 #input.9=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.2.relu  1 1 input.9 392 negative_slope=2.000000e-01 #input.9=(1,192,8,8)f32 #392=(1,192,8,8)f32
+prim::Constant           pnnx_93                  0 1 393 value=1
+pnnx.Attribute           block0.convblock.3       0 1 beta.9 @data=(1,192,1,1)f32 #beta.9=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.3.conv  1 1 392 397 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #392=(1,192,8,8)f32 #397=(1,192,8,8)f32
+aten::mul                pnnx_94                  2 1 397 beta.9 398 #397=(1,192,8,8)f32 #beta.9=(1,192,1,1)f32 #398=(1,192,8,8)f32
+aten::add                pnnx_95                  3 1 398 392 393 input.11 #398=(1,192,8,8)f32 #392=(1,192,8,8)f32 #input.11=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.3.relu  1 1 input.11 400 negative_slope=2.000000e-01 #input.11=(1,192,8,8)f32 #400=(1,192,8,8)f32
+prim::Constant           pnnx_96                  0 1 401 value=1
+pnnx.Attribute           block0.convblock.4       0 1 beta.11 @data=(1,192,1,1)f32 #beta.11=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.4.conv  1 1 400 405 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #400=(1,192,8,8)f32 #405=(1,192,8,8)f32
+aten::mul                pnnx_97                  2 1 405 beta.11 406 #405=(1,192,8,8)f32 #beta.11=(1,192,1,1)f32 #406=(1,192,8,8)f32
+aten::add                pnnx_98                  3 1 406 400 401 input.13 #406=(1,192,8,8)f32 #400=(1,192,8,8)f32 #input.13=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.4.relu  1 1 input.13 408 negative_slope=2.000000e-01 #input.13=(1,192,8,8)f32 #408=(1,192,8,8)f32
+prim::Constant           pnnx_99                  0 1 409 value=1
+pnnx.Attribute           block0.convblock.5       0 1 beta.13 @data=(1,192,1,1)f32 #beta.13=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.5.conv  1 1 408 413 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #408=(1,192,8,8)f32 #413=(1,192,8,8)f32
+aten::mul                pnnx_100                 2 1 413 beta.13 414 #413=(1,192,8,8)f32 #beta.13=(1,192,1,1)f32 #414=(1,192,8,8)f32
+aten::add                pnnx_101                 3 1 414 408 409 input.15 #414=(1,192,8,8)f32 #408=(1,192,8,8)f32 #input.15=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.5.relu  1 1 input.15 416 negative_slope=2.000000e-01 #input.15=(1,192,8,8)f32 #416=(1,192,8,8)f32
+prim::Constant           pnnx_102                 0 1 417 value=1
+pnnx.Attribute           block0.convblock.6       0 1 beta.15 @data=(1,192,1,1)f32 #beta.15=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.6.conv  1 1 416 421 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #416=(1,192,8,8)f32 #421=(1,192,8,8)f32
+aten::mul                pnnx_103                 2 1 421 beta.15 422 #421=(1,192,8,8)f32 #beta.15=(1,192,1,1)f32 #422=(1,192,8,8)f32
+aten::add                pnnx_104                 3 1 422 416 417 input.17 #422=(1,192,8,8)f32 #416=(1,192,8,8)f32 #input.17=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.6.relu  1 1 input.17 424 negative_slope=2.000000e-01 #input.17=(1,192,8,8)f32 #424=(1,192,8,8)f32
+prim::Constant           pnnx_105                 0 1 425 value=1
+pnnx.Attribute           block0.convblock.7       0 1 beta.17 @data=(1,192,1,1)f32 #beta.17=(1,192,1,1)f32
+nn.Conv2d                block0.convblock.7.conv  1 1 424 429 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(3,3) out_channels=192 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(192)f32 @weight=(192,192,3,3)f32 #424=(1,192,8,8)f32 #429=(1,192,8,8)f32
+aten::mul                pnnx_106                 2 1 429 beta.17 430 #429=(1,192,8,8)f32 #beta.17=(1,192,1,1)f32 #430=(1,192,8,8)f32
+aten::add                pnnx_107                 3 1 430 424 425 input.19 #430=(1,192,8,8)f32 #424=(1,192,8,8)f32 #input.19=(1,192,8,8)f32
+nn.LeakyReLU             block0.convblock.7.relu  1 1 input.19 432 negative_slope=2.000000e-01 #input.19=(1,192,8,8)f32 #432=(1,192,8,8)f32
+nn.ConvTranspose2d       block0.lastconv.0        1 1 432 435 bias=True dilation=(1,1) groups=1 in_channels=192 kernel_size=(4,4) out_channels=24 output_padding=(0,0) padding=(1,1) stride=(2,2) @bias=(24)f32 @weight=(192,24,4,4)f32 #432=(1,192,8,8)f32 #435=(1,24,16,16)f32
+nn.PixelShuffle          block0.lastconv.1        1 1 435 436 upscale_factor=2 #435=(1,24,16,16)f32 #436=(1,6,32,32)f32
+prim::Constant           pnnx_108                 0 1 834 value=8.000000e+00
+prim::ListConstruct      pnnx_109                 2 1 340 834 437
+prim::Constant           pnnx_113                 0 1 837 value=0
+F.upsample               F.upsample_2             2 1 436 437 tmp.2 align_corners=False mode=bilinear $input=436 $scale_factor=437 #436=(1,6,32,32)f32 #tmp.2=(1,6,256,256)f32
+prim::Constant           pnnx_115                 0 1 838 value=1
+prim::Constant           pnnx_116                 0 1 839 value=0
+prim::Constant           pnnx_117                 0 1 840 value=1
+Tensor.slice             Tensor.slice_22          5 1 tmp.2 341 837 342 343 439 $input=tmp.2 $dim=341 $start=837 $end=342 $step=343 #tmp.2=(1,6,256,256)f32 #439=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_23          5 1 439 838 839 344 840 440 $input=439 $dim=838 $start=839 $end=344 $step=840 #439=(1,6,256,256)f32 #440=(1,4,256,256)f32
+aten::mul                pnnx_119                 2 1 440 336 flow.15 #440=(1,4,256,256)f32 #flow.15=(1,4,256,256)f32
+prim::Constant           pnnx_120                 0 1 841 value=0
+prim::Constant           pnnx_121                 0 1 842 value=0
+prim::Constant           pnnx_122                 0 1 843 value=2147483647
+prim::Constant           pnnx_123                 0 1 844 value=1
+prim::Constant           pnnx_125                 0 1 845 value=1
+prim::Constant           pnnx_126                 0 1 846 value=4
+prim::Constant           pnnx_127                 0 1 847 value=1
+Tensor.slice             Tensor.slice_24          5 1 tmp.2 841 842 843 844 442 $input=tmp.2 $dim=841 $start=842 $end=843 $step=844 #tmp.2=(1,6,256,256)f32 #442=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_25          5 1 442 845 846 345 847 mask.7 $input=442 $dim=845 $start=846 $end=345 $step=847 #442=(1,6,256,256)f32 #mask.7=(1,1,256,256)f32
+prim::TupleConstruct     pnnx_129                 2 1 flow.15 mask.7 444 #flow.15=(1,4,256,256)f32 #mask.7=(1,1,256,256)f32
+prim::TupleUnpack        pnnx_130                 1 2 444 83 84 #83=(1,4,256,256)f32 #84=(1,1,256,256)f32
+prim::Constant           pnnx_131                 0 1 848 value=0
+prim::Constant           pnnx_132                 0 1 849 value=0
+prim::Constant           pnnx_133                 0 1 850 value=2147483647
+prim::Constant           pnnx_134                 0 1 851 value=1
+prim::Constant           pnnx_136                 0 1 852 value=1
+prim::Constant           pnnx_137                 0 1 853 value=0
+prim::Constant           pnnx_138                 0 1 854 value=3
+prim::Constant           pnnx_139                 0 1 855 value=1
+Tensor.slice             Tensor.slice_26          5 1 83 848 849 850 851 87 $input=83 $dim=848 $start=849 $end=850 $step=851 #83=(1,4,256,256)f32 #87=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_27          5 1 87 852 853 854 855 91 $input=87 $dim=852 $start=853 $end=854 $step=855 #87=(1,4,256,256)f32 #91=(1,3,256,256)f32
+aten::pow                pnnx_141                 2 1 img0.1 91 warped_img0.1 #img0.1=(1,3,256,256)f32 #91=(1,3,256,256)f32 #warped_img0.1=(1,3,256,256)f32
+prim::Constant           pnnx_142                 0 1 856 value=0
+prim::Constant           pnnx_143                 0 1 857 value=0
+prim::Constant           pnnx_144                 0 1 858 value=2147483647
+prim::Constant           pnnx_145                 0 1 859 value=1
+prim::Constant           pnnx_147                 0 1 860 value=1
+prim::Constant           pnnx_148                 0 1 861 value=1
+prim::Constant           pnnx_149                 0 1 862 value=1
+Tensor.slice             Tensor.slice_28          5 1 83 856 857 858 859 95 $input=83 $dim=856 $start=857 $end=858 $step=859 #83=(1,4,256,256)f32 #95=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_29          5 1 95 860 861 98 862 100 $input=95 $dim=860 $start=861 $end=98 $step=862 #95=(1,4,256,256)f32 #100=(1,3,256,256)f32
+aten::pow                pnnx_151                 2 1 img1.1 100 warped_img1.1 #img1.1=(1,3,256,256)f32 #100=(1,3,256,256)f32 #warped_img1.1=(1,3,256,256)f32
+prim::Constant           pnnx_152                 0 1 863 value=0
+prim::Constant           pnnx_153                 0 1 864 value=0
+prim::Constant           pnnx_154                 0 1 865 value=2147483647
+prim::Constant           pnnx_155                 0 1 866 value=1
+prim::Constant           pnnx_157                 0 1 867 value=1
+prim::Constant           pnnx_158                 0 1 868 value=1
+prim::Constant           pnnx_159                 0 1 869 value=1
+Tensor.slice             Tensor.slice_30          5 1 83 863 864 865 866 104 $input=83 $dim=863 $start=864 $end=865 $step=866 #83=(1,4,256,256)f32 #104=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_31          5 1 104 867 868 107 869 109 $input=104 $dim=867 $start=868 $end=107 $step=869 #104=(1,4,256,256)f32 #109=(1,1,256,256)f32
+aten::pow                pnnx_161                 2 1 323 109 wf0.1 #323=(1,8,256,256)f32 #109=(1,1,256,256)f32 #wf0.1=(1,8,256,256)f32
+prim::Constant           pnnx_162                 0 1 870 value=0
+prim::Constant           pnnx_163                 0 1 871 value=0
+prim::Constant           pnnx_164                 0 1 872 value=2147483647
+prim::Constant           pnnx_165                 0 1 873 value=1
+prim::Constant           pnnx_167                 0 1 874 value=1
+prim::Constant           pnnx_168                 0 1 875 value=2
+prim::Constant           pnnx_169                 0 1 876 value=3
+prim::Constant           pnnx_170                 0 1 877 value=1
+Tensor.slice             Tensor.slice_32          5 1 83 870 871 872 873 113 $input=83 $dim=870 $start=871 $end=872 $step=873 #83=(1,4,256,256)f32 #113=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_33          5 1 113 874 875 876 877 117 $input=113 $dim=874 $start=875 $end=876 $step=877 #113=(1,4,256,256)f32 #117=(1,1,256,256)f32
+aten::pow                pnnx_172                 2 1 335 117 wf1.1 #335=(1,8,256,256)f32 #117=(1,1,256,256)f32 #wf1.1=(1,8,256,256)f32
+prim::Constant           pnnx_173                 0 1 878 value=0
+prim::Constant           pnnx_174                 0 1 879 value=0
+prim::Constant           pnnx_175                 0 1 880 value=2147483647
+prim::Constant           pnnx_176                 0 1 881 value=1
+prim::Constant           pnnx_178                 0 1 882 value=1
+prim::Constant           pnnx_179                 0 1 883 value=0
+prim::Constant           pnnx_180                 0 1 884 value=3
+prim::Constant           pnnx_181                 0 1 885 value=1
+prim::Constant           pnnx_183                 0 1 886 value=0
+prim::Constant           pnnx_184                 0 1 887 value=0
+prim::Constant           pnnx_185                 0 1 888 value=2147483647
+prim::Constant           pnnx_186                 0 1 889 value=1
+prim::Constant           pnnx_188                 0 1 890 value=1
+prim::Constant           pnnx_189                 0 1 891 value=0
+prim::Constant           pnnx_190                 0 1 892 value=3
+prim::Constant           pnnx_191                 0 1 893 value=1
+Tensor.slice             Tensor.slice_36          5 1 warped_img1.1 886 887 888 889 127 $input=warped_img1.1 $dim=886 $start=887 $end=888 $step=889 #warped_img1.1=(1,3,256,256)f32 #127=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_37          5 1 127 890 891 892 893 131 $input=127 $dim=890 $start=891 $end=892 $step=893 #127=(1,3,256,256)f32 #131=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_34          5 1 warped_img0.1 878 879 880 881 121 $input=warped_img0.1 $dim=878 $start=879 $end=880 $step=881 #warped_img0.1=(1,3,256,256)f32 #121=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_35          5 1 121 882 883 884 885 124 $input=121 $dim=882 $start=883 $end=884 $step=885 #121=(1,3,256,256)f32 #124=(1,3,256,256)f32
+prim::ListConstruct      pnnx_193                 6 1 124 131 wf0.1 wf1.1 timestep0.1 84 136 #124=(1,3,256,256)f32 #131=(1,3,256,256)f32 #wf0.1=(1,8,256,256)f32 #wf1.1=(1,8,256,256)f32 #timestep0.1=(1,1,256,256)f32 #84=(1,1,256,256)f32
+prim::Constant           pnnx_194                 0 1 894 value=1
+prim::Constant           pnnx_196                 0 1 445 value=4
+prim::Constant           pnnx_197                 0 1 446 value=1.000000e+00
+prim::Constant           pnnx_200                 0 1 449 value=2.500000e-01
+prim::Constant           pnnx_201                 0 1 450 value=1
+prim::Constant           pnnx_202                 0 1 451 value=4.000000e+00
+prim::Constant           pnnx_203                 0 1 452 value=0
+prim::Constant           pnnx_204                 0 1 453 value=2147483647
+prim::Constant           pnnx_205                 0 1 454 value=4
+prim::Constant           pnnx_206                 0 1 455 value=5
+prim::Constant           pnnx_207                 0 1 895 value=2.500000e-01
+prim::ListConstruct      pnnx_208                 2 1 449 895 459
+prim::Constant           pnnx_210                 0 1 896 value=2.500000e-01
+prim::Constant           pnnx_211                 0 1 897 value=2.500000e-01
+prim::ListConstruct      pnnx_212                 2 1 896 897 461
+F.upsample               F.upsample_4             2 1 83 461 462 align_corners=False mode=bilinear $input=83 $scale_factor=461 #83=(1,4,256,256)f32 #462=(1,4,64,64)f32
+aten::mul                pnnx_216                 2 1 462 446 463 #462=(1,4,64,64)f32 #463=(1,4,64,64)f32
+aten::div                pnnx_217                 2 1 463 445 flow.1 #463=(1,4,64,64)f32 #flow.1=(1,4,64,64)f32
+torch.cat                torch.cat_81             2 1 136 894 input2.1 $tensors=136 $dim=894 #input2.1=(1,24,256,256)f32
+F.upsample               F.upsample_3             2 1 input2.1 459 x.2 align_corners=False mode=bilinear $input=input2.1 $scale_factor=459 #input2.1=(1,24,256,256)f32 #x.2=(1,24,64,64)f32
+prim::ListConstruct      pnnx_218                 2 1 x.2 flow.1 465 #x.2=(1,24,64,64)f32 #flow.1=(1,4,64,64)f32
+torch.cat                torch.cat_82             2 1 465 450 input0.5 $tensors=465 $dim=450 #input0.5=(1,28,64,64)f32
+nn.Conv2d                block1.conv0.0.0         1 1 input0.5 471 bias=True dilation=(1,1) groups=1 in_channels=28 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(64)f32 @weight=(64,28,3,3)f32 #input0.5=(1,28,64,64)f32 #471=(1,64,32,32)f32
+nn.LeakyReLU             block1.conv0.0.1         1 1 471 472 negative_slope=2.000000e-01 #471=(1,64,32,32)f32 #472=(1,64,32,32)f32
+nn.Conv2d                block1.conv0.1.0         1 1 472 475 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(128)f32 @weight=(128,64,3,3)f32 #472=(1,64,32,32)f32 #475=(1,128,16,16)f32
+nn.LeakyReLU             block1.conv0.1.1         1 1 475 476 negative_slope=2.000000e-01 #475=(1,128,16,16)f32 #476=(1,128,16,16)f32
+prim::Constant           pnnx_220                 0 1 485 value=1
+pnnx.Attribute           block1.convblock.0       0 1 beta.19 @data=(1,128,1,1)f32 #beta.19=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.0.conv  1 1 476 489 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #476=(1,128,16,16)f32 #489=(1,128,16,16)f32
+aten::mul                pnnx_221                 2 1 489 beta.19 490 #489=(1,128,16,16)f32 #beta.19=(1,128,1,1)f32 #490=(1,128,16,16)f32
+aten::add                pnnx_222                 3 1 490 476 485 input.21 #490=(1,128,16,16)f32 #476=(1,128,16,16)f32 #input.21=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.0.relu  1 1 input.21 492 negative_slope=2.000000e-01 #input.21=(1,128,16,16)f32 #492=(1,128,16,16)f32
+prim::Constant           pnnx_223                 0 1 493 value=1
+pnnx.Attribute           block1.convblock.1       0 1 beta.21 @data=(1,128,1,1)f32 #beta.21=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.1.conv  1 1 492 497 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #492=(1,128,16,16)f32 #497=(1,128,16,16)f32
+aten::mul                pnnx_224                 2 1 497 beta.21 498 #497=(1,128,16,16)f32 #beta.21=(1,128,1,1)f32 #498=(1,128,16,16)f32
+aten::add                pnnx_225                 3 1 498 492 493 input.23 #498=(1,128,16,16)f32 #492=(1,128,16,16)f32 #input.23=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.1.relu  1 1 input.23 500 negative_slope=2.000000e-01 #input.23=(1,128,16,16)f32 #500=(1,128,16,16)f32
+prim::Constant           pnnx_226                 0 1 501 value=1
+pnnx.Attribute           block1.convblock.2       0 1 beta.23 @data=(1,128,1,1)f32 #beta.23=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.2.conv  1 1 500 505 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #500=(1,128,16,16)f32 #505=(1,128,16,16)f32
+aten::mul                pnnx_227                 2 1 505 beta.23 506 #505=(1,128,16,16)f32 #beta.23=(1,128,1,1)f32 #506=(1,128,16,16)f32
+aten::add                pnnx_228                 3 1 506 500 501 input.25 #506=(1,128,16,16)f32 #500=(1,128,16,16)f32 #input.25=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.2.relu  1 1 input.25 508 negative_slope=2.000000e-01 #input.25=(1,128,16,16)f32 #508=(1,128,16,16)f32
+prim::Constant           pnnx_229                 0 1 509 value=1
+pnnx.Attribute           block1.convblock.3       0 1 beta.25 @data=(1,128,1,1)f32 #beta.25=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.3.conv  1 1 508 513 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #508=(1,128,16,16)f32 #513=(1,128,16,16)f32
+aten::mul                pnnx_230                 2 1 513 beta.25 514 #513=(1,128,16,16)f32 #beta.25=(1,128,1,1)f32 #514=(1,128,16,16)f32
+aten::add                pnnx_231                 3 1 514 508 509 input.27 #514=(1,128,16,16)f32 #508=(1,128,16,16)f32 #input.27=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.3.relu  1 1 input.27 516 negative_slope=2.000000e-01 #input.27=(1,128,16,16)f32 #516=(1,128,16,16)f32
+prim::Constant           pnnx_232                 0 1 517 value=1
+pnnx.Attribute           block1.convblock.4       0 1 beta.27 @data=(1,128,1,1)f32 #beta.27=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.4.conv  1 1 516 521 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #516=(1,128,16,16)f32 #521=(1,128,16,16)f32
+aten::mul                pnnx_233                 2 1 521 beta.27 522 #521=(1,128,16,16)f32 #beta.27=(1,128,1,1)f32 #522=(1,128,16,16)f32
+aten::add                pnnx_234                 3 1 522 516 517 input.29 #522=(1,128,16,16)f32 #516=(1,128,16,16)f32 #input.29=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.4.relu  1 1 input.29 524 negative_slope=2.000000e-01 #input.29=(1,128,16,16)f32 #524=(1,128,16,16)f32
+prim::Constant           pnnx_235                 0 1 525 value=1
+pnnx.Attribute           block1.convblock.5       0 1 beta.29 @data=(1,128,1,1)f32 #beta.29=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.5.conv  1 1 524 529 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #524=(1,128,16,16)f32 #529=(1,128,16,16)f32
+aten::mul                pnnx_236                 2 1 529 beta.29 530 #529=(1,128,16,16)f32 #beta.29=(1,128,1,1)f32 #530=(1,128,16,16)f32
+aten::add                pnnx_237                 3 1 530 524 525 input.31 #530=(1,128,16,16)f32 #524=(1,128,16,16)f32 #input.31=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.5.relu  1 1 input.31 532 negative_slope=2.000000e-01 #input.31=(1,128,16,16)f32 #532=(1,128,16,16)f32
+prim::Constant           pnnx_238                 0 1 533 value=1
+pnnx.Attribute           block1.convblock.6       0 1 beta.31 @data=(1,128,1,1)f32 #beta.31=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.6.conv  1 1 532 537 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #532=(1,128,16,16)f32 #537=(1,128,16,16)f32
+aten::mul                pnnx_239                 2 1 537 beta.31 538 #537=(1,128,16,16)f32 #beta.31=(1,128,1,1)f32 #538=(1,128,16,16)f32
+aten::add                pnnx_240                 3 1 538 532 533 input.33 #538=(1,128,16,16)f32 #532=(1,128,16,16)f32 #input.33=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.6.relu  1 1 input.33 540 negative_slope=2.000000e-01 #input.33=(1,128,16,16)f32 #540=(1,128,16,16)f32
+prim::Constant           pnnx_241                 0 1 541 value=1
+pnnx.Attribute           block1.convblock.7       0 1 beta.33 @data=(1,128,1,1)f32 #beta.33=(1,128,1,1)f32
+nn.Conv2d                block1.convblock.7.conv  1 1 540 545 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(3,3) out_channels=128 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(128)f32 @weight=(128,128,3,3)f32 #540=(1,128,16,16)f32 #545=(1,128,16,16)f32
+aten::mul                pnnx_242                 2 1 545 beta.33 546 #545=(1,128,16,16)f32 #beta.33=(1,128,1,1)f32 #546=(1,128,16,16)f32
+aten::add                pnnx_243                 3 1 546 540 541 input.35 #546=(1,128,16,16)f32 #540=(1,128,16,16)f32 #input.35=(1,128,16,16)f32
+nn.LeakyReLU             block1.convblock.7.relu  1 1 input.35 548 negative_slope=2.000000e-01 #input.35=(1,128,16,16)f32 #548=(1,128,16,16)f32
+nn.ConvTranspose2d       block1.lastconv.0        1 1 548 551 bias=True dilation=(1,1) groups=1 in_channels=128 kernel_size=(4,4) out_channels=24 output_padding=(0,0) padding=(1,1) stride=(2,2) @bias=(24)f32 @weight=(128,24,4,4)f32 #548=(1,128,16,16)f32 #551=(1,24,32,32)f32
+nn.PixelShuffle          block1.lastconv.1        1 1 551 552 upscale_factor=2 #551=(1,24,32,32)f32 #552=(1,6,64,64)f32
+prim::Constant           pnnx_244                 0 1 900 value=4.000000e+00
+prim::ListConstruct      pnnx_245                 2 1 451 900 553
+prim::Constant           pnnx_249                 0 1 903 value=0
+prim::Constant           pnnx_250                 0 1 904 value=1
+F.upsample               F.upsample_5             2 1 552 553 tmp.4 align_corners=False mode=bilinear $input=552 $scale_factor=553 #552=(1,6,64,64)f32 #tmp.4=(1,6,256,256)f32
+prim::Constant           pnnx_252                 0 1 905 value=1
+prim::Constant           pnnx_253                 0 1 906 value=0
+prim::Constant           pnnx_254                 0 1 907 value=1
+prim::Constant           pnnx_256                 0 1 908 value=4
+Tensor.slice             Tensor.slice_38          5 1 tmp.4 452 903 453 904 555 $input=tmp.4 $dim=452 $start=903 $end=453 $step=904 #tmp.4=(1,6,256,256)f32 #555=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_39          5 1 555 905 906 454 907 556 $input=555 $dim=905 $start=906 $end=454 $step=907 #555=(1,6,256,256)f32 #556=(1,4,256,256)f32
+aten::mul                pnnx_257                 2 1 556 908 fd.2 #556=(1,4,256,256)f32 #fd.2=(1,4,256,256)f32
+prim::Constant           pnnx_258                 0 1 909 value=0
+prim::Constant           pnnx_259                 0 1 910 value=0
+prim::Constant           pnnx_260                 0 1 911 value=2147483647
+prim::Constant           pnnx_261                 0 1 912 value=1
+prim::Constant           pnnx_263                 0 1 913 value=1
+prim::Constant           pnnx_264                 0 1 914 value=4
+prim::Constant           pnnx_265                 0 1 915 value=1
+Tensor.slice             Tensor.slice_40          5 1 tmp.4 909 910 911 912 558 $input=tmp.4 $dim=909 $start=910 $end=911 $step=912 #tmp.4=(1,6,256,256)f32 #558=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_41          5 1 558 913 914 455 915 mask.9 $input=558 $dim=913 $start=914 $end=455 $step=915 #558=(1,6,256,256)f32 #mask.9=(1,1,256,256)f32
+prim::TupleConstruct     pnnx_267                 2 1 fd.2 mask.9 560 #fd.2=(1,4,256,256)f32 #mask.9=(1,1,256,256)f32
+prim::TupleUnpack        pnnx_268                 1 2 560 143 144 #143=(1,4,256,256)f32 #144=(1,1,256,256)f32
+prim::Constant           pnnx_269                 0 1 916 value=1
+aten::add                pnnx_270                 3 1 83 143 916 flow.13 #83=(1,4,256,256)f32 #143=(1,4,256,256)f32 #flow.13=(1,4,256,256)f32
+prim::Constant           pnnx_271                 0 1 917 value=0
+prim::Constant           pnnx_272                 0 1 918 value=0
+prim::Constant           pnnx_273                 0 1 919 value=2147483647
+prim::Constant           pnnx_274                 0 1 920 value=1
+prim::Constant           pnnx_276                 0 1 921 value=1
+prim::Constant           pnnx_277                 0 1 922 value=0
+prim::Constant           pnnx_278                 0 1 923 value=3
+prim::Constant           pnnx_279                 0 1 924 value=1
+Tensor.slice             Tensor.slice_42          5 1 flow.13 917 918 919 920 151 $input=flow.13 $dim=917 $start=918 $end=919 $step=920 #flow.13=(1,4,256,256)f32 #151=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_43          5 1 151 921 922 923 924 155 $input=151 $dim=921 $start=922 $end=923 $step=924 #151=(1,4,256,256)f32 #155=(1,3,256,256)f32
+aten::pow                pnnx_281                 2 1 img0.1 155 warped_img00.1 #img0.1=(1,3,256,256)f32 #155=(1,3,256,256)f32 #warped_img00.1=(1,3,256,256)f32
+prim::Constant           pnnx_282                 0 1 925 value=0
+prim::Constant           pnnx_283                 0 1 926 value=0
+prim::Constant           pnnx_284                 0 1 927 value=2147483647
+prim::Constant           pnnx_285                 0 1 928 value=1
+prim::Constant           pnnx_287                 0 1 929 value=1
+prim::Constant           pnnx_288                 0 1 930 value=1
+prim::Constant           pnnx_289                 0 1 931 value=4
+prim::Constant           pnnx_290                 0 1 932 value=1
+Tensor.slice             Tensor.slice_44          5 1 flow.13 925 926 927 928 159 $input=flow.13 $dim=925 $start=926 $end=927 $step=928 #flow.13=(1,4,256,256)f32 #159=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_45          5 1 159 929 930 931 932 163 $input=159 $dim=929 $start=930 $end=931 $step=932 #159=(1,4,256,256)f32 #163=(1,3,256,256)f32
+aten::pow                pnnx_292                 2 1 img1.1 163 warped_img10.1 #img1.1=(1,3,256,256)f32 #163=(1,3,256,256)f32 #warped_img10.1=(1,3,256,256)f32
+prim::Constant           pnnx_293                 0 1 933 value=0
+prim::Constant           pnnx_294                 0 1 934 value=0
+prim::Constant           pnnx_295                 0 1 935 value=2147483647
+prim::Constant           pnnx_296                 0 1 936 value=1
+prim::Constant           pnnx_298                 0 1 937 value=1
+prim::Constant           pnnx_299                 0 1 938 value=1
+prim::Constant           pnnx_300                 0 1 939 value=2
+prim::Constant           pnnx_301                 0 1 940 value=1
+Tensor.slice             Tensor.slice_46          5 1 flow.13 933 934 935 936 167 $input=flow.13 $dim=933 $start=934 $end=935 $step=936 #flow.13=(1,4,256,256)f32 #167=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_47          5 1 167 937 938 939 940 171 $input=167 $dim=937 $start=938 $end=939 $step=940 #167=(1,4,256,256)f32 #171=(1,1,256,256)f32
+aten::pow                pnnx_303                 2 1 323 171 wf00.1 #323=(1,8,256,256)f32 #171=(1,1,256,256)f32 #wf00.1=(1,8,256,256)f32
+prim::Constant           pnnx_304                 0 1 941 value=0
+prim::Constant           pnnx_305                 0 1 942 value=0
+prim::Constant           pnnx_306                 0 1 943 value=2147483647
+prim::Constant           pnnx_307                 0 1 944 value=1
+prim::Constant           pnnx_309                 0 1 945 value=1
+prim::Constant           pnnx_310                 0 1 946 value=2
+prim::Constant           pnnx_311                 0 1 947 value=3
+prim::Constant           pnnx_312                 0 1 948 value=1
+Tensor.slice             Tensor.slice_48          5 1 flow.13 941 942 943 944 175 $input=flow.13 $dim=941 $start=942 $end=943 $step=944 #flow.13=(1,4,256,256)f32 #175=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_49          5 1 175 945 946 947 948 179 $input=175 $dim=945 $start=946 $end=947 $step=948 #175=(1,4,256,256)f32 #179=(1,1,256,256)f32
+aten::pow                pnnx_314                 2 1 335 179 wf10.1 #335=(1,8,256,256)f32 #179=(1,1,256,256)f32 #wf10.1=(1,8,256,256)f32
+prim::Constant           pnnx_315                 0 1 949 value=0
+prim::Constant           pnnx_316                 0 1 950 value=0
+prim::Constant           pnnx_317                 0 1 951 value=2147483647
+prim::Constant           pnnx_318                 0 1 952 value=1
+prim::Constant           pnnx_320                 0 1 953 value=1
+prim::Constant           pnnx_321                 0 1 954 value=0
+prim::Constant           pnnx_322                 0 1 955 value=3
+prim::Constant           pnnx_323                 0 1 956 value=1
+prim::Constant           pnnx_325                 0 1 957 value=0
+prim::Constant           pnnx_326                 0 1 958 value=0
+prim::Constant           pnnx_327                 0 1 959 value=2147483647
+prim::Constant           pnnx_328                 0 1 960 value=1
+prim::Constant           pnnx_330                 0 1 961 value=1
+prim::Constant           pnnx_331                 0 1 962 value=0
+prim::Constant           pnnx_332                 0 1 963 value=3
+prim::Constant           pnnx_333                 0 1 964 value=1
+Tensor.slice             Tensor.slice_52          5 1 warped_img10.1 957 958 959 960 189 $input=warped_img10.1 $dim=957 $start=958 $end=959 $step=960 #warped_img10.1=(1,3,256,256)f32 #189=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_53          5 1 189 961 962 963 964 193 $input=189 $dim=961 $start=962 $end=963 $step=964 #189=(1,3,256,256)f32 #193=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_50          5 1 warped_img00.1 949 950 951 952 183 $input=warped_img00.1 $dim=949 $start=950 $end=951 $step=952 #warped_img00.1=(1,3,256,256)f32 #183=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_51          5 1 183 953 954 955 956 186 $input=183 $dim=953 $start=954 $end=955 $step=956 #183=(1,3,256,256)f32 #186=(1,3,256,256)f32
+prim::ListConstruct      pnnx_335                 6 1 186 193 wf00.1 wf10.1 timestep0.1 144 198 #186=(1,3,256,256)f32 #193=(1,3,256,256)f32 #wf00.1=(1,8,256,256)f32 #wf10.1=(1,8,256,256)f32 #timestep0.1=(1,1,256,256)f32 #144=(1,1,256,256)f32
+prim::Constant           pnnx_336                 0 1 965 value=1
+prim::Constant           pnnx_338                 0 1 561 value=2
+prim::Constant           pnnx_339                 0 1 562 value=1.000000e+00
+prim::Constant           pnnx_342                 0 1 565 value=5.000000e-01
+prim::Constant           pnnx_343                 0 1 566 value=1
+prim::Constant           pnnx_344                 0 1 567 value=2.000000e+00
+prim::Constant           pnnx_345                 0 1 568 value=0
+prim::Constant           pnnx_346                 0 1 569 value=2147483647
+prim::Constant           pnnx_347                 0 1 570 value=4
+prim::Constant           pnnx_348                 0 1 571 value=5
+prim::Constant           pnnx_349                 0 1 966 value=5.000000e-01
+prim::ListConstruct      pnnx_350                 2 1 565 966 575
+prim::Constant           pnnx_352                 0 1 967 value=5.000000e-01
+prim::Constant           pnnx_353                 0 1 968 value=5.000000e-01
+prim::ListConstruct      pnnx_354                 2 1 967 968 577
+F.upsample               F.upsample_7             2 1 flow.13 577 578 align_corners=False mode=bilinear $input=flow.13 $scale_factor=577 #flow.13=(1,4,256,256)f32 #578=(1,4,128,128)f32
+aten::mul                pnnx_358                 2 1 578 562 579 #578=(1,4,128,128)f32 #579=(1,4,128,128)f32
+aten::div                pnnx_359                 2 1 579 561 flow0.15 #579=(1,4,128,128)f32 #flow0.15=(1,4,128,128)f32
+torch.cat                torch.cat_83             2 1 198 965 input3.1 $tensors=198 $dim=965 #input3.1=(1,24,256,256)f32
+F.upsample               F.upsample_6             2 1 input3.1 575 x.4 align_corners=False mode=bilinear $input=input3.1 $scale_factor=575 #input3.1=(1,24,256,256)f32 #x.4=(1,24,128,128)f32
+prim::ListConstruct      pnnx_360                 2 1 x.4 flow0.15 581 #x.4=(1,24,128,128)f32 #flow0.15=(1,4,128,128)f32
+torch.cat                torch.cat_84             2 1 581 566 input0.7 $tensors=581 $dim=566 #input0.7=(1,28,128,128)f32
+nn.Conv2d                block2.conv0.0.0         1 1 input0.7 587 bias=True dilation=(1,1) groups=1 in_channels=28 kernel_size=(3,3) out_channels=48 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(48)f32 @weight=(48,28,3,3)f32 #input0.7=(1,28,128,128)f32 #587=(1,48,64,64)f32
+nn.LeakyReLU             block2.conv0.0.1         1 1 587 588 negative_slope=2.000000e-01 #587=(1,48,64,64)f32 #588=(1,48,64,64)f32
+nn.Conv2d                block2.conv0.1.0         1 1 588 591 bias=True dilation=(1,1) groups=1 in_channels=48 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(96)f32 @weight=(96,48,3,3)f32 #588=(1,48,64,64)f32 #591=(1,96,32,32)f32
+nn.LeakyReLU             block2.conv0.1.1         1 1 591 592 negative_slope=2.000000e-01 #591=(1,96,32,32)f32 #592=(1,96,32,32)f32
+prim::Constant           pnnx_362                 0 1 601 value=1
+pnnx.Attribute           block2.convblock.0       0 1 beta.35 @data=(1,96,1,1)f32 #beta.35=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.0.conv  1 1 592 605 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #592=(1,96,32,32)f32 #605=(1,96,32,32)f32
+aten::mul                pnnx_363                 2 1 605 beta.35 606 #605=(1,96,32,32)f32 #beta.35=(1,96,1,1)f32 #606=(1,96,32,32)f32
+aten::add                pnnx_364                 3 1 606 592 601 input.37 #606=(1,96,32,32)f32 #592=(1,96,32,32)f32 #input.37=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.0.relu  1 1 input.37 608 negative_slope=2.000000e-01 #input.37=(1,96,32,32)f32 #608=(1,96,32,32)f32
+prim::Constant           pnnx_365                 0 1 609 value=1
+pnnx.Attribute           block2.convblock.1       0 1 beta.37 @data=(1,96,1,1)f32 #beta.37=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.1.conv  1 1 608 613 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #608=(1,96,32,32)f32 #613=(1,96,32,32)f32
+aten::mul                pnnx_366                 2 1 613 beta.37 614 #613=(1,96,32,32)f32 #beta.37=(1,96,1,1)f32 #614=(1,96,32,32)f32
+aten::add                pnnx_367                 3 1 614 608 609 input.39 #614=(1,96,32,32)f32 #608=(1,96,32,32)f32 #input.39=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.1.relu  1 1 input.39 616 negative_slope=2.000000e-01 #input.39=(1,96,32,32)f32 #616=(1,96,32,32)f32
+prim::Constant           pnnx_368                 0 1 617 value=1
+pnnx.Attribute           block2.convblock.2       0 1 beta.39 @data=(1,96,1,1)f32 #beta.39=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.2.conv  1 1 616 621 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #616=(1,96,32,32)f32 #621=(1,96,32,32)f32
+aten::mul                pnnx_369                 2 1 621 beta.39 622 #621=(1,96,32,32)f32 #beta.39=(1,96,1,1)f32 #622=(1,96,32,32)f32
+aten::add                pnnx_370                 3 1 622 616 617 input.41 #622=(1,96,32,32)f32 #616=(1,96,32,32)f32 #input.41=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.2.relu  1 1 input.41 624 negative_slope=2.000000e-01 #input.41=(1,96,32,32)f32 #624=(1,96,32,32)f32
+prim::Constant           pnnx_371                 0 1 625 value=1
+pnnx.Attribute           block2.convblock.3       0 1 beta.41 @data=(1,96,1,1)f32 #beta.41=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.3.conv  1 1 624 629 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #624=(1,96,32,32)f32 #629=(1,96,32,32)f32
+aten::mul                pnnx_372                 2 1 629 beta.41 630 #629=(1,96,32,32)f32 #beta.41=(1,96,1,1)f32 #630=(1,96,32,32)f32
+aten::add                pnnx_373                 3 1 630 624 625 input.43 #630=(1,96,32,32)f32 #624=(1,96,32,32)f32 #input.43=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.3.relu  1 1 input.43 632 negative_slope=2.000000e-01 #input.43=(1,96,32,32)f32 #632=(1,96,32,32)f32
+prim::Constant           pnnx_374                 0 1 633 value=1
+pnnx.Attribute           block2.convblock.4       0 1 beta.43 @data=(1,96,1,1)f32 #beta.43=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.4.conv  1 1 632 637 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #632=(1,96,32,32)f32 #637=(1,96,32,32)f32
+aten::mul                pnnx_375                 2 1 637 beta.43 638 #637=(1,96,32,32)f32 #beta.43=(1,96,1,1)f32 #638=(1,96,32,32)f32
+aten::add                pnnx_376                 3 1 638 632 633 input.45 #638=(1,96,32,32)f32 #632=(1,96,32,32)f32 #input.45=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.4.relu  1 1 input.45 640 negative_slope=2.000000e-01 #input.45=(1,96,32,32)f32 #640=(1,96,32,32)f32
+prim::Constant           pnnx_377                 0 1 641 value=1
+pnnx.Attribute           block2.convblock.5       0 1 beta.45 @data=(1,96,1,1)f32 #beta.45=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.5.conv  1 1 640 645 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #640=(1,96,32,32)f32 #645=(1,96,32,32)f32
+aten::mul                pnnx_378                 2 1 645 beta.45 646 #645=(1,96,32,32)f32 #beta.45=(1,96,1,1)f32 #646=(1,96,32,32)f32
+aten::add                pnnx_379                 3 1 646 640 641 input.47 #646=(1,96,32,32)f32 #640=(1,96,32,32)f32 #input.47=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.5.relu  1 1 input.47 648 negative_slope=2.000000e-01 #input.47=(1,96,32,32)f32 #648=(1,96,32,32)f32
+prim::Constant           pnnx_380                 0 1 649 value=1
+pnnx.Attribute           block2.convblock.6       0 1 beta.47 @data=(1,96,1,1)f32 #beta.47=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.6.conv  1 1 648 653 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #648=(1,96,32,32)f32 #653=(1,96,32,32)f32
+aten::mul                pnnx_381                 2 1 653 beta.47 654 #653=(1,96,32,32)f32 #beta.47=(1,96,1,1)f32 #654=(1,96,32,32)f32
+aten::add                pnnx_382                 3 1 654 648 649 input.49 #654=(1,96,32,32)f32 #648=(1,96,32,32)f32 #input.49=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.6.relu  1 1 input.49 656 negative_slope=2.000000e-01 #input.49=(1,96,32,32)f32 #656=(1,96,32,32)f32
+prim::Constant           pnnx_383                 0 1 657 value=1
+pnnx.Attribute           block2.convblock.7       0 1 beta.49 @data=(1,96,1,1)f32 #beta.49=(1,96,1,1)f32
+nn.Conv2d                block2.convblock.7.conv  1 1 656 661 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(3,3) out_channels=96 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(96)f32 @weight=(96,96,3,3)f32 #656=(1,96,32,32)f32 #661=(1,96,32,32)f32
+aten::mul                pnnx_384                 2 1 661 beta.49 662 #661=(1,96,32,32)f32 #beta.49=(1,96,1,1)f32 #662=(1,96,32,32)f32
+aten::add                pnnx_385                 3 1 662 656 657 input.51 #662=(1,96,32,32)f32 #656=(1,96,32,32)f32 #input.51=(1,96,32,32)f32
+nn.LeakyReLU             block2.convblock.7.relu  1 1 input.51 664 negative_slope=2.000000e-01 #input.51=(1,96,32,32)f32 #664=(1,96,32,32)f32
+nn.ConvTranspose2d       block2.lastconv.0        1 1 664 667 bias=True dilation=(1,1) groups=1 in_channels=96 kernel_size=(4,4) out_channels=24 output_padding=(0,0) padding=(1,1) stride=(2,2) @bias=(24)f32 @weight=(96,24,4,4)f32 #664=(1,96,32,32)f32 #667=(1,24,64,64)f32
+nn.PixelShuffle          block2.lastconv.1        1 1 667 668 upscale_factor=2 #667=(1,24,64,64)f32 #668=(1,6,128,128)f32
+prim::Constant           pnnx_386                 0 1 971 value=2.000000e+00
+prim::ListConstruct      pnnx_387                 2 1 567 971 669
+prim::Constant           pnnx_391                 0 1 974 value=0
+prim::Constant           pnnx_392                 0 1 975 value=1
+F.upsample               F.upsample_8             2 1 668 669 tmp.6 align_corners=False mode=bilinear $input=668 $scale_factor=669 #668=(1,6,128,128)f32 #tmp.6=(1,6,256,256)f32
+prim::Constant           pnnx_394                 0 1 976 value=1
+prim::Constant           pnnx_395                 0 1 977 value=0
+prim::Constant           pnnx_396                 0 1 978 value=1
+prim::Constant           pnnx_398                 0 1 979 value=2
+Tensor.slice             Tensor.slice_54          5 1 tmp.6 568 974 569 975 671 $input=tmp.6 $dim=568 $start=974 $end=569 $step=975 #tmp.6=(1,6,256,256)f32 #671=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_55          5 1 671 976 977 570 978 672 $input=671 $dim=976 $start=977 $end=570 $step=978 #671=(1,6,256,256)f32 #672=(1,4,256,256)f32
+aten::mul                pnnx_399                 2 1 672 979 fd.4 #672=(1,4,256,256)f32 #fd.4=(1,4,256,256)f32
+prim::Constant           pnnx_400                 0 1 980 value=0
+prim::Constant           pnnx_401                 0 1 981 value=0
+prim::Constant           pnnx_402                 0 1 982 value=2147483647
+prim::Constant           pnnx_403                 0 1 983 value=1
+prim::Constant           pnnx_405                 0 1 984 value=1
+prim::Constant           pnnx_406                 0 1 985 value=4
+prim::Constant           pnnx_407                 0 1 986 value=1
+Tensor.slice             Tensor.slice_56          5 1 tmp.6 980 981 982 983 674 $input=tmp.6 $dim=980 $start=981 $end=982 $step=983 #tmp.6=(1,6,256,256)f32 #674=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_57          5 1 674 984 985 571 986 mask.11 $input=674 $dim=984 $start=985 $end=571 $step=986 #674=(1,6,256,256)f32 #mask.11=(1,1,256,256)f32
+prim::TupleConstruct     pnnx_409                 2 1 fd.4 mask.11 676 #fd.4=(1,4,256,256)f32 #mask.11=(1,1,256,256)f32
+prim::TupleUnpack        pnnx_410                 1 2 676 205 206 #205=(1,4,256,256)f32 #206=(1,1,256,256)f32
+prim::Constant           pnnx_411                 0 1 987 value=1
+aten::add                pnnx_412                 3 1 flow.13 205 987 flow0.13 #flow.13=(1,4,256,256)f32 #205=(1,4,256,256)f32 #flow0.13=(1,4,256,256)f32
+prim::Constant           pnnx_413                 0 1 988 value=0
+prim::Constant           pnnx_414                 0 1 989 value=0
+prim::Constant           pnnx_415                 0 1 990 value=2147483647
+prim::Constant           pnnx_416                 0 1 991 value=1
+prim::Constant           pnnx_418                 0 1 992 value=1
+prim::Constant           pnnx_419                 0 1 993 value=0
+prim::Constant           pnnx_420                 0 1 994 value=3
+prim::Constant           pnnx_421                 0 1 995 value=1
+Tensor.slice             Tensor.slice_58          5 1 flow0.13 988 989 990 991 213 $input=flow0.13 $dim=988 $start=989 $end=990 $step=991 #flow0.13=(1,4,256,256)f32 #213=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_59          5 1 213 992 993 994 995 217 $input=213 $dim=992 $start=993 $end=994 $step=995 #213=(1,4,256,256)f32 #217=(1,3,256,256)f32
+aten::pow                pnnx_423                 2 1 img0.1 217 warped_img01.1 #img0.1=(1,3,256,256)f32 #217=(1,3,256,256)f32 #warped_img01.1=(1,3,256,256)f32
+prim::Constant           pnnx_424                 0 1 996 value=0
+prim::Constant           pnnx_425                 0 1 997 value=0
+prim::Constant           pnnx_426                 0 1 998 value=2147483647
+prim::Constant           pnnx_427                 0 1 999 value=1
+prim::Constant           pnnx_429                 0 1 1000 value=1
+prim::Constant           pnnx_430                 0 1 1001 value=1
+prim::Constant           pnnx_431                 0 1 1002 value=4
+prim::Constant           pnnx_432                 0 1 1003 value=1
+Tensor.slice             Tensor.slice_60          5 1 flow0.13 996 997 998 999 221 $input=flow0.13 $dim=996 $start=997 $end=998 $step=999 #flow0.13=(1,4,256,256)f32 #221=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_61          5 1 221 1000 1001 1002 1003 225 $input=221 $dim=1000 $start=1001 $end=1002 $step=1003 #221=(1,4,256,256)f32 #225=(1,3,256,256)f32
+aten::pow                pnnx_434                 2 1 img1.1 225 warped_img11.1 #img1.1=(1,3,256,256)f32 #225=(1,3,256,256)f32 #warped_img11.1=(1,3,256,256)f32
+prim::Constant           pnnx_435                 0 1 1004 value=0
+prim::Constant           pnnx_436                 0 1 1005 value=0
+prim::Constant           pnnx_437                 0 1 1006 value=2147483647
+prim::Constant           pnnx_438                 0 1 1007 value=1
+prim::Constant           pnnx_440                 0 1 1008 value=1
+prim::Constant           pnnx_441                 0 1 1009 value=1
+prim::Constant           pnnx_442                 0 1 1010 value=2
+prim::Constant           pnnx_443                 0 1 1011 value=1
+Tensor.slice             Tensor.slice_62          5 1 flow0.13 1004 1005 1006 1007 229 $input=flow0.13 $dim=1004 $start=1005 $end=1006 $step=1007 #flow0.13=(1,4,256,256)f32 #229=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_63          5 1 229 1008 1009 1010 1011 233 $input=229 $dim=1008 $start=1009 $end=1010 $step=1011 #229=(1,4,256,256)f32 #233=(1,1,256,256)f32
+aten::pow                pnnx_445                 2 1 323 233 wf01.1 #323=(1,8,256,256)f32 #233=(1,1,256,256)f32 #wf01.1=(1,8,256,256)f32
+prim::Constant           pnnx_446                 0 1 1012 value=0
+prim::Constant           pnnx_447                 0 1 1013 value=0
+prim::Constant           pnnx_448                 0 1 1014 value=2147483647
+prim::Constant           pnnx_449                 0 1 1015 value=1
+prim::Constant           pnnx_451                 0 1 1016 value=1
+prim::Constant           pnnx_452                 0 1 1017 value=2
+prim::Constant           pnnx_453                 0 1 1018 value=3
+prim::Constant           pnnx_454                 0 1 1019 value=1
+Tensor.slice             Tensor.slice_64          5 1 flow0.13 1012 1013 1014 1015 237 $input=flow0.13 $dim=1012 $start=1013 $end=1014 $step=1015 #flow0.13=(1,4,256,256)f32 #237=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_65          5 1 237 1016 1017 1018 1019 241 $input=237 $dim=1016 $start=1017 $end=1018 $step=1019 #237=(1,4,256,256)f32 #241=(1,1,256,256)f32
+aten::pow                pnnx_456                 2 1 335 241 wf11.1 #335=(1,8,256,256)f32 #241=(1,1,256,256)f32 #wf11.1=(1,8,256,256)f32
+prim::Constant           pnnx_457                 0 1 1020 value=0
+prim::Constant           pnnx_458                 0 1 1021 value=0
+prim::Constant           pnnx_459                 0 1 1022 value=2147483647
+prim::Constant           pnnx_460                 0 1 1023 value=1
+prim::Constant           pnnx_462                 0 1 1024 value=1
+prim::Constant           pnnx_463                 0 1 1025 value=0
+prim::Constant           pnnx_464                 0 1 1026 value=3
+prim::Constant           pnnx_465                 0 1 1027 value=1
+prim::Constant           pnnx_467                 0 1 1028 value=0
+prim::Constant           pnnx_468                 0 1 1029 value=0
+prim::Constant           pnnx_469                 0 1 1030 value=2147483647
+prim::Constant           pnnx_470                 0 1 1031 value=1
+prim::Constant           pnnx_472                 0 1 1032 value=1
+prim::Constant           pnnx_473                 0 1 1033 value=0
+prim::Constant           pnnx_474                 0 1 1034 value=3
+prim::Constant           pnnx_475                 0 1 1035 value=1
+Tensor.slice             Tensor.slice_68          5 1 warped_img11.1 1028 1029 1030 1031 251 $input=warped_img11.1 $dim=1028 $start=1029 $end=1030 $step=1031 #warped_img11.1=(1,3,256,256)f32 #251=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_69          5 1 251 1032 1033 1034 1035 255 $input=251 $dim=1032 $start=1033 $end=1034 $step=1035 #251=(1,3,256,256)f32 #255=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_66          5 1 warped_img01.1 1020 1021 1022 1023 245 $input=warped_img01.1 $dim=1020 $start=1021 $end=1022 $step=1023 #warped_img01.1=(1,3,256,256)f32 #245=(1,3,256,256)f32
+Tensor.slice             Tensor.slice_67          5 1 245 1024 1025 1026 1027 248 $input=245 $dim=1024 $start=1025 $end=1026 $step=1027 #245=(1,3,256,256)f32 #248=(1,3,256,256)f32
+prim::ListConstruct      pnnx_477                 6 1 248 255 wf01.1 wf11.1 timestep0.1 206 260 #248=(1,3,256,256)f32 #255=(1,3,256,256)f32 #wf01.1=(1,8,256,256)f32 #wf11.1=(1,8,256,256)f32 #timestep0.1=(1,1,256,256)f32 #206=(1,1,256,256)f32
+prim::Constant           pnnx_478                 0 1 1036 value=1
+prim::Constant           pnnx_480                 0 1 677 value=1
+prim::Constant           pnnx_481                 0 1 678 value=1.000000e+00
+prim::Constant           pnnx_484                 0 1 681 value=1.000000e+00
+prim::Constant           pnnx_485                 0 1 682 value=1
+prim::Constant           pnnx_486                 0 1 683 value=0
+prim::Constant           pnnx_487                 0 1 684 value=2147483647
+prim::Constant           pnnx_488                 0 1 685 value=4
+prim::Constant           pnnx_489                 0 1 686 value=5
+prim::Constant           pnnx_490                 0 1 1037 value=1.000000e+00
+prim::ListConstruct      pnnx_491                 2 1 681 1037 690
+prim::Constant           pnnx_493                 0 1 1038 value=1.000000e+00
+prim::Constant           pnnx_494                 0 1 1039 value=1.000000e+00
+prim::ListConstruct      pnnx_495                 2 1 1038 1039 692
+F.upsample               F.upsample_10            2 1 flow0.13 692 693 align_corners=False mode=bilinear $input=flow0.13 $scale_factor=692 #flow0.13=(1,4,256,256)f32 #693=(1,4,256,256)f32
+aten::mul                pnnx_499                 2 1 693 678 694 #693=(1,4,256,256)f32 #694=(1,4,256,256)f32
+aten::div                pnnx_500                 2 1 694 677 flow0.1 #694=(1,4,256,256)f32 #flow0.1=(1,4,256,256)f32
+torch.cat                torch.cat_85             2 1 260 1036 input4.1 $tensors=260 $dim=1036 #input4.1=(1,24,256,256)f32
+F.upsample               F.upsample_9             2 1 input4.1 690 x.1 align_corners=False mode=bilinear $input=input4.1 $scale_factor=690 #input4.1=(1,24,256,256)f32 #x.1=(1,24,256,256)f32
+prim::ListConstruct      pnnx_501                 2 1 x.1 flow0.1 696 #x.1=(1,24,256,256)f32 #flow0.1=(1,4,256,256)f32
+torch.cat                torch.cat_86             2 1 696 682 input0.1 $tensors=696 $dim=682 #input0.1=(1,28,256,256)f32
+nn.Conv2d                block3.conv0.0.0         1 1 input0.1 702 bias=True dilation=(1,1) groups=1 in_channels=28 kernel_size=(3,3) out_channels=32 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(32)f32 @weight=(32,28,3,3)f32 #input0.1=(1,28,256,256)f32 #702=(1,32,128,128)f32
+nn.LeakyReLU             block3.conv0.0.1         1 1 702 703 negative_slope=2.000000e-01 #702=(1,32,128,128)f32 #703=(1,32,128,128)f32
+nn.Conv2d                block3.conv0.1.0         1 1 703 706 bias=True dilation=(1,1) groups=1 in_channels=32 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(2,2) @bias=(64)f32 @weight=(64,32,3,3)f32 #703=(1,32,128,128)f32 #706=(1,64,64,64)f32
+nn.LeakyReLU             block3.conv0.1.1         1 1 706 707 negative_slope=2.000000e-01 #706=(1,64,64,64)f32 #707=(1,64,64,64)f32
+prim::Constant           pnnx_503                 0 1 716 value=1
+pnnx.Attribute           block3.convblock.0       0 1 beta.2 @data=(1,64,1,1)f32 #beta.2=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.0.conv  1 1 707 720 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #707=(1,64,64,64)f32 #720=(1,64,64,64)f32
+aten::mul                pnnx_504                 2 1 720 beta.2 721 #720=(1,64,64,64)f32 #beta.2=(1,64,1,1)f32 #721=(1,64,64,64)f32
+aten::add                pnnx_505                 3 1 721 707 716 input.2 #721=(1,64,64,64)f32 #707=(1,64,64,64)f32 #input.2=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.0.relu  1 1 input.2 723 negative_slope=2.000000e-01 #input.2=(1,64,64,64)f32 #723=(1,64,64,64)f32
+prim::Constant           pnnx_506                 0 1 724 value=1
+pnnx.Attribute           block3.convblock.1       0 1 beta.4 @data=(1,64,1,1)f32 #beta.4=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.1.conv  1 1 723 728 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #723=(1,64,64,64)f32 #728=(1,64,64,64)f32
+aten::mul                pnnx_507                 2 1 728 beta.4 729 #728=(1,64,64,64)f32 #beta.4=(1,64,1,1)f32 #729=(1,64,64,64)f32
+aten::add                pnnx_508                 3 1 729 723 724 input.4 #729=(1,64,64,64)f32 #723=(1,64,64,64)f32 #input.4=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.1.relu  1 1 input.4 731 negative_slope=2.000000e-01 #input.4=(1,64,64,64)f32 #731=(1,64,64,64)f32
+prim::Constant           pnnx_509                 0 1 732 value=1
+pnnx.Attribute           block3.convblock.2       0 1 beta.6 @data=(1,64,1,1)f32 #beta.6=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.2.conv  1 1 731 736 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #731=(1,64,64,64)f32 #736=(1,64,64,64)f32
+aten::mul                pnnx_510                 2 1 736 beta.6 737 #736=(1,64,64,64)f32 #beta.6=(1,64,1,1)f32 #737=(1,64,64,64)f32
+aten::add                pnnx_511                 3 1 737 731 732 input.6 #737=(1,64,64,64)f32 #731=(1,64,64,64)f32 #input.6=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.2.relu  1 1 input.6 739 negative_slope=2.000000e-01 #input.6=(1,64,64,64)f32 #739=(1,64,64,64)f32
+prim::Constant           pnnx_512                 0 1 740 value=1
+pnnx.Attribute           block3.convblock.3       0 1 beta.8 @data=(1,64,1,1)f32 #beta.8=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.3.conv  1 1 739 744 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #739=(1,64,64,64)f32 #744=(1,64,64,64)f32
+aten::mul                pnnx_513                 2 1 744 beta.8 745 #744=(1,64,64,64)f32 #beta.8=(1,64,1,1)f32 #745=(1,64,64,64)f32
+aten::add                pnnx_514                 3 1 745 739 740 input.8 #745=(1,64,64,64)f32 #739=(1,64,64,64)f32 #input.8=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.3.relu  1 1 input.8 747 negative_slope=2.000000e-01 #input.8=(1,64,64,64)f32 #747=(1,64,64,64)f32
+prim::Constant           pnnx_515                 0 1 748 value=1
+pnnx.Attribute           block3.convblock.4       0 1 beta.10 @data=(1,64,1,1)f32 #beta.10=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.4.conv  1 1 747 752 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #747=(1,64,64,64)f32 #752=(1,64,64,64)f32
+aten::mul                pnnx_516                 2 1 752 beta.10 753 #752=(1,64,64,64)f32 #beta.10=(1,64,1,1)f32 #753=(1,64,64,64)f32
+aten::add                pnnx_517                 3 1 753 747 748 input.10 #753=(1,64,64,64)f32 #747=(1,64,64,64)f32 #input.10=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.4.relu  1 1 input.10 755 negative_slope=2.000000e-01 #input.10=(1,64,64,64)f32 #755=(1,64,64,64)f32
+prim::Constant           pnnx_518                 0 1 756 value=1
+pnnx.Attribute           block3.convblock.5       0 1 beta.12 @data=(1,64,1,1)f32 #beta.12=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.5.conv  1 1 755 760 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #755=(1,64,64,64)f32 #760=(1,64,64,64)f32
+aten::mul                pnnx_519                 2 1 760 beta.12 761 #760=(1,64,64,64)f32 #beta.12=(1,64,1,1)f32 #761=(1,64,64,64)f32
+aten::add                pnnx_520                 3 1 761 755 756 input.12 #761=(1,64,64,64)f32 #755=(1,64,64,64)f32 #input.12=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.5.relu  1 1 input.12 763 negative_slope=2.000000e-01 #input.12=(1,64,64,64)f32 #763=(1,64,64,64)f32
+prim::Constant           pnnx_521                 0 1 764 value=1
+pnnx.Attribute           block3.convblock.6       0 1 beta.14 @data=(1,64,1,1)f32 #beta.14=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.6.conv  1 1 763 768 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #763=(1,64,64,64)f32 #768=(1,64,64,64)f32
+aten::mul                pnnx_522                 2 1 768 beta.14 769 #768=(1,64,64,64)f32 #beta.14=(1,64,1,1)f32 #769=(1,64,64,64)f32
+aten::add                pnnx_523                 3 1 769 763 764 input.14 #769=(1,64,64,64)f32 #763=(1,64,64,64)f32 #input.14=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.6.relu  1 1 input.14 771 negative_slope=2.000000e-01 #input.14=(1,64,64,64)f32 #771=(1,64,64,64)f32
+prim::Constant           pnnx_524                 0 1 772 value=1
+pnnx.Attribute           block3.convblock.7       0 1 beta.1 @data=(1,64,1,1)f32 #beta.1=(1,64,1,1)f32
+nn.Conv2d                block3.convblock.7.conv  1 1 771 776 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(3,3) out_channels=64 padding=(1,1) padding_mode=zeros stride=(1,1) @bias=(64)f32 @weight=(64,64,3,3)f32 #771=(1,64,64,64)f32 #776=(1,64,64,64)f32
+aten::mul                pnnx_525                 2 1 776 beta.1 777 #776=(1,64,64,64)f32 #beta.1=(1,64,1,1)f32 #777=(1,64,64,64)f32
+aten::add                pnnx_526                 3 1 777 771 772 input.1 #777=(1,64,64,64)f32 #771=(1,64,64,64)f32 #input.1=(1,64,64,64)f32
+nn.LeakyReLU             block3.convblock.7.relu  1 1 input.1 779 negative_slope=2.000000e-01 #input.1=(1,64,64,64)f32 #779=(1,64,64,64)f32
+nn.ConvTranspose2d       block3.lastconv.0        1 1 779 782 bias=True dilation=(1,1) groups=1 in_channels=64 kernel_size=(4,4) out_channels=24 output_padding=(0,0) padding=(1,1) stride=(2,2) @bias=(24)f32 @weight=(64,24,4,4)f32 #779=(1,64,64,64)f32 #782=(1,24,128,128)f32
+nn.PixelShuffle          block3.lastconv.1        1 1 782 783 upscale_factor=2 #782=(1,24,128,128)f32 #783=(1,6,256,256)f32
+prim::Constant           pnnx_527                 0 1 1042 value=1.000000e+00
+prim::Constant           pnnx_528                 0 1 1043 value=1.000000e+00
+prim::ListConstruct      pnnx_529                 2 1 1042 1043 784
+prim::Constant           pnnx_533                 0 1 1046 value=0
+prim::Constant           pnnx_534                 0 1 1047 value=1
+F.upsample               F.upsample_11            2 1 783 784 tmp.1 align_corners=False mode=bilinear $input=783 $scale_factor=784 #783=(1,6,256,256)f32 #tmp.1=(1,6,256,256)f32
+prim::Constant           pnnx_536                 0 1 1048 value=1
+prim::Constant           pnnx_537                 0 1 1049 value=0
+prim::Constant           pnnx_538                 0 1 1050 value=1
+prim::Constant           pnnx_540                 0 1 1051 value=1
+Tensor.slice             Tensor.slice_70          5 1 tmp.1 683 1046 684 1047 786 $input=tmp.1 $dim=683 $start=1046 $end=684 $step=1047 #tmp.1=(1,6,256,256)f32 #786=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_71          5 1 786 1048 1049 685 1050 787 $input=786 $dim=1048 $start=1049 $end=685 $step=1050 #786=(1,6,256,256)f32 #787=(1,4,256,256)f32
+aten::mul                pnnx_541                 2 1 787 1051 fd.1 #787=(1,4,256,256)f32 #fd.1=(1,4,256,256)f32
+prim::Constant           pnnx_542                 0 1 1052 value=0
+prim::Constant           pnnx_543                 0 1 1053 value=0
+prim::Constant           pnnx_544                 0 1 1054 value=2147483647
+prim::Constant           pnnx_545                 0 1 1055 value=1
+prim::Constant           pnnx_547                 0 1 1056 value=1
+prim::Constant           pnnx_548                 0 1 1057 value=4
+prim::Constant           pnnx_549                 0 1 1058 value=1
+Tensor.slice             Tensor.slice_72          5 1 tmp.1 1052 1053 1054 1055 789 $input=tmp.1 $dim=1052 $start=1053 $end=1054 $step=1055 #tmp.1=(1,6,256,256)f32 #789=(1,6,256,256)f32
+Tensor.slice             Tensor.slice_73          5 1 789 1056 1057 686 1058 mask.1 $input=789 $dim=1056 $start=1057 $end=686 $step=1058 #789=(1,6,256,256)f32 #mask.1=(1,1,256,256)f32
+prim::TupleConstruct     pnnx_551                 2 1 fd.1 mask.1 791 #fd.1=(1,4,256,256)f32 #mask.1=(1,1,256,256)f32
+prim::TupleUnpack        pnnx_552                 1 2 791 267 268 #267=(1,4,256,256)f32 #268=(1,1,256,256)f32
+prim::Constant           pnnx_553                 0 1 1059 value=1
+aten::add                pnnx_554                 3 1 flow0.13 267 1059 flow1.1 #flow0.13=(1,4,256,256)f32 #267=(1,4,256,256)f32 #flow1.1=(1,4,256,256)f32
+prim::Constant           pnnx_555                 0 1 1060 value=0
+prim::Constant           pnnx_556                 0 1 1061 value=0
+prim::Constant           pnnx_557                 0 1 1062 value=2147483647
+prim::Constant           pnnx_558                 0 1 1063 value=1
+prim::Constant           pnnx_560                 0 1 1064 value=1
+prim::Constant           pnnx_561                 0 1 1065 value=0
+prim::Constant           pnnx_562                 0 1 1066 value=3
+prim::Constant           pnnx_563                 0 1 1067 value=1
+Tensor.slice             Tensor.slice_74          5 1 flow1.1 1060 1061 1062 1063 275 $input=flow1.1 $dim=1060 $start=1061 $end=1062 $step=1063 #flow1.1=(1,4,256,256)f32 #275=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_75          5 1 275 1064 1065 1066 1067 279 $input=275 $dim=1064 $start=1065 $end=1066 $step=1067 #275=(1,4,256,256)f32 #279=(1,3,256,256)f32
+aten::pow                pnnx_565                 2 1 img0.1 279 warped_img02.1 #img0.1=(1,3,256,256)f32 #279=(1,3,256,256)f32 #warped_img02.1=(1,3,256,256)f32
+prim::Constant           pnnx_566                 0 1 1068 value=0
+prim::Constant           pnnx_567                 0 1 1069 value=0
+prim::Constant           pnnx_568                 0 1 1070 value=2147483647
+prim::Constant           pnnx_569                 0 1 1071 value=1
+prim::Constant           pnnx_571                 0 1 1072 value=1
+prim::Constant           pnnx_572                 0 1 1073 value=1
+prim::Constant           pnnx_573                 0 1 1074 value=4
+prim::Constant           pnnx_574                 0 1 1075 value=1
+Tensor.slice             Tensor.slice_76          5 1 flow1.1 1068 1069 1070 1071 283 $input=flow1.1 $dim=1068 $start=1069 $end=1070 $step=1071 #flow1.1=(1,4,256,256)f32 #283=(1,4,256,256)f32
+Tensor.slice             Tensor.slice_77          5 1 283 1072 1073 1074 1075 287 $input=283 $dim=1072 $start=1073 $end=1074 $step=1075 #283=(1,4,256,256)f32 #287=(1,3,256,256)f32
+aten::pow                pnnx_576                 2 1 img1.1 287 warped_img12.1 #img1.1=(1,3,256,256)f32 #287=(1,3,256,256)f32 #warped_img12.1=(1,3,256,256)f32
+F.sigmoid                F.sigmoid_0              1 1 268 mask.5 $input=268 #268=(1,1,256,256)f32 #mask.5=(1,1,256,256)f32
+aten::mul                pnnx_578                 2 1 warped_img02.1 mask.5 293 #warped_img02.1=(1,3,256,256)f32 #mask.5=(1,1,256,256)f32 #293=(1,3,256,256)f32
+prim::Constant           pnnx_579                 0 1 1076 value=1
+prim::Constant           pnnx_580                 0 1 1077 value=1
+aten::rsub               pnnx_581                 3 1 mask.5 1076 1077 297 #mask.5=(1,1,256,256)f32 #297=(1,1,256,256)f32
+aten::mul                pnnx_582                 2 1 warped_img12.1 297 298 #warped_img12.1=(1,3,256,256)f32 #297=(1,1,256,256)f32 #298=(1,3,256,256)f32
+prim::Constant           pnnx_583                 0 1 1078 value=1
+aten::add                pnnx_584                 3 1 293 298 1078 302 #293=(1,3,256,256)f32 #298=(1,3,256,256)f32 #302=(1,3,256,256)f32
+pnnx.Output              pnnx_output_0            1 0 302 #302=(1,3,256,256)f32

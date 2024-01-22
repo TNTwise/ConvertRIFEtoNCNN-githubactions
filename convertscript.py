@@ -45,9 +45,10 @@ if onnx:
         os.system('./ncnnoptimize flownet-sim.param flownet-sim.bin flownet.param flownet.bin 65536 ')#the 65536 converts it to fp16
     else:
         os.system('./ncnnoptimize flownet-sim.param flownet-sim.bin flownet.param flownet.bin ')
-    os.system('python3 fix_param_file.py')
+    
 
 if pnnx:
     
     os.system(f'./pnnx rife.pt inputshape=[1,3,256,256],[1,3,256,256],[1] fp16={fp16} optlevel=2 ncnnparam=flownet.param ncnnbin=flownet.bin')
     
+os.system('python3 fix_param_file.py')

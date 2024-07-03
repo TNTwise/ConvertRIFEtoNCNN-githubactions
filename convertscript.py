@@ -44,7 +44,7 @@ if onnx:
     if fp16 == 1:
         os.system('./ncnnoptimize flownet-sim.param flownet-sim.bin flownet.param flownet.bin 65536 ')#the 65536 converts it to fp16
     else:
-        os.system('./ncnnoptimize flownet-sim.param flownet-sim.bin flownet.param flownet.bin ')
+        os.system('./ncnnoptimize flownet-sim.param flownet-sim.bin flownet.param flownet.bin 131072 ') #131072 = fp32
     
 
 if pnnx:

@@ -96,21 +96,7 @@ class IFNet(nn.Module):
         self.block2 = IFBlock(8+4+16, c=96)
         self.block3 = IFBlock(8+4+16, c=48)
         self.encode = Head()        
-	'''
-	self.teacher = Flownet(8+4+16+3, c=96)
-	self.caltime = nn.Sequential(
-            nn.Conv2d(16+9, 32, 3, 2, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(32, 64, 3, 2, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 64, 3, 1, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 64, 3, 1, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 1, 3, 1, 1),
-            nn.Sigmoid()
-        )
-	'''
+	
 
     def forward(self, x, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
         if training == False:

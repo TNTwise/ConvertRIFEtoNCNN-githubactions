@@ -137,7 +137,7 @@ class IFNet(nn.Module):
             if flow is None:
                 flow, mask, feat = block[i](torch.cat((img0[:, :3], img1[:, :3], f0, f1, timestep), 1), None, scale=scale_list[i])
                 if ensemble:
-                    f_, m_ = block[i](torch.cat((img1[:, :3], img0[:, :3], f1, f0, 1-timestep), 1), None, scale=scale_list[i])
+                    f_, m_, feat = block[i](torch.cat((img1[:, :3], img0[:, :3], f1, f0, 1-timestep), 1), None, scale=scale_list[i])
                     flow = (flow + torch.cat((f_[:, 2:4], f_[:, :2]), 1)) / 2
                     mask = (mask + (-m_)) / 2
             else:
@@ -145,7 +145,7 @@ class IFNet(nn.Module):
                 wf1 = warp(f1, flow[:, 2:4])
                 fd, m0, feat = block[i](torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
                 if ensemble:
-                    f_, m_ = block[i](torch.cat((warped_img1[:, :3], warped_img0[:, :3], wf1, wf0, 1-timestep, -mask), 1), torch.cat((flow[:, 2:4], flow[:, :2]), 1), scale=scale_list[i])
+                    f_, m_, feat = block[i](torch.cat((warped_img1[:, :3], warped_img0[:, :3], wf1, wf0, 1-timestep, -mask, feat), 1), torch.cat((flow[:, 2:4], flow[:, :2]), 1), scale=scale_list[i])
                     fd = (fd + torch.cat((f_[:, 2:4], f_[:, :2]), 1)) / 2
                     mask = (m0 + (-m_)) / 2
                 else:

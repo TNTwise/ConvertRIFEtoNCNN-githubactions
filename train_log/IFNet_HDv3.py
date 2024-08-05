@@ -125,8 +125,7 @@ class IFNet(nn.Module):
         self.blocks = [self.block0, self.block1, self.block2, self.block3]
         self.f0 = self.encode(img0[:, :3])
         self.f1 = self.encode(img1[:, :3])
-        x = torch.cat(img0,img1)
-        timestep = (x[:, :1].clone() * 0 + 1) * timestep
+        timestep = (img0[:, :1].clone() * 0 + 1) * timestep
         
 
         merged = []

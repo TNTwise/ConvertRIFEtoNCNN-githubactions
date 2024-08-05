@@ -115,7 +115,7 @@ class IFNet(nn.Module):
         
 
     def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
-        self.ensemble=True
+        self.ensemble=False
         self.f0 = None
         scale=1
         self.f1 = None

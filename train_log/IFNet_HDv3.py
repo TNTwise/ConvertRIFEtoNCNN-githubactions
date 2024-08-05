@@ -112,6 +112,10 @@ class IFNet(nn.Module):
             nn.Conv2d(64, 1, 3, 1, 1),
             nn.Sigmoid()
         )
+        
+
+    def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
+        self.ensemble=ensemble
         self.f0 = None
         scale=1
         self.f1 = None
@@ -119,12 +123,10 @@ class IFNet(nn.Module):
         self.counter = 1
         self.interpolateFactor = 2
         self.blocks = [self.block0, self.block1, self.block2, self.block3]
-
-    def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
-        self.ensemble=ensemble
-        
         self.f0 = self.encode(img0[:, :3])
         self.f1 = self.encode(img1[:, :3])
+        x = torch.cat(img0,img1)
+        timestep = (x[:, :1].clone() * 0 + 1) * timestep
         
 
         merged = []

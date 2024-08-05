@@ -122,21 +122,10 @@ class IFNet(nn.Module):
 
     def forward(self, img0,img1, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
         self.ensemble=ensemble
-        if self.interpolateFactor == 2:
-            if self.f0 is None:
-                self.f0 = self.encode(img0[:, :3])
-            self.f1 = self.encode(img1[:, :3])
-        else:
-            if self.counter == self.interpolateFactor:
-                self.counter = 1
-                if self.f0 is None:
-                    self.f0 = self.encode(img0[:, :3])
-                self.f1 = self.encode(img1[:, :3])
-            else:
-                if self.f0 is None or self.f1 is None:
-                    self.f0 = self.encode(img0[:, :3])
-                    self.f1 = self.encode(img1[:, :3])
-            self.counter += 1
+        
+        self.f0 = self.encode(img0[:, :3])
+        self.f1 = self.encode(img1[:, :3])
+        
 
         merged = []
         warped_img0 = img0

@@ -90,7 +90,7 @@ def modify_ifnet_hd():
         if 'torch.zeros_like(x' in line:
             line = line.replace('torch.zeros_like(x','torch.zeros_like(torch.cat((img0,img1),1)')
         if 'timestep = (x[:, :1].clone() * 0 + 1) * timestep' in line:
-            line = line.replace('timestep = (x[:, :1].clone() * 0 + 1) * timestep', 'timestep = (img0[:, :1].clone() * 0 + 1) * timestep).float()')
+            line = line.replace('timestep = (x[:, :1].clone() * 0 + 1) * timestep', 'timestep = ((img0[:, :1].clone() * 0 + 1) * timestep).float()')
         
         if 'wf0 = warp(f0, flow[:, :2])' in line:
             line = line.replace('wf0 = warp(f0, flow[:, :2])','wf0 = f0**flow[:, 1:2]')

@@ -76,6 +76,7 @@ class IFBlock(nn.Module):
         )
 
     def forward(self, x, flow=None, scale=1):
+
         x = F.interpolate(x, scale_factor= 1. / scale, mode="bilinear", align_corners=False)
         if flow is not None:
             flow = F.interpolate(flow, scale_factor= 1. / scale, mode="bilinear", align_corners=False) * 1. / scale
@@ -133,7 +134,7 @@ class IFNet(nn.Module):
                     print("warning: ensemble is not supported since RIFEv4.21")
             else:
                 wf0 = f0**flow[:, 1:2]
-                wf1 = f1**flow[:, 1:2]
+                wf1 = f1**flow[:, 2:3]
                 fd, m0, feat = block[i](torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
                 if ensemble:
                     print("warning: ensemble is not supported since RIFEv4.21")

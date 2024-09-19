@@ -138,24 +138,13 @@ class IFNet(nn.Module):
         block = [self.block0, self.block1, self.block2, self.block3, self.block4]
         for i in range(5):
             if flow is None:
-                print(block[i])
                 flow, mask, feat = block[i](torch.cat((img0[:, :3], img1[:, :3], f0, f1, timestep), 1), None, scale=scale_list[i])
                 if ensemble:
                     print("warning: ensemble is not supported since RIFEv4.21")
             else:
                 wf0 = f0**flow[:, 1:2]
                 wf1 = f1**flow[:, 2:3]
-                print(i)
-                if i == 1:
-                    fd, m0, feat = self.block1(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
-                if i == 2:
-                    fd, m0, feat = self.block2(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
-                if i == 3:
-                    fd, m0, feat = self.block3(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
-                if i == 4:
-                    fd, m0, feat = self.block4(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
-                
-                
+                fd, m0, feat = block[i](torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
                 if ensemble:
                     print("warning: ensemble is not supported since RIFEv4.21")
                 else:

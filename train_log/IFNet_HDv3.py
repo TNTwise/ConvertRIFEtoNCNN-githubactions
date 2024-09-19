@@ -116,25 +116,15 @@ class IFNet(nn.Module):
         )
         '''
 
-    def forward(self, img0,img1, timestep=0.5, scale_list=[16, 8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
-        if training == True:
-            x=1
-            channel=1
-            img1 = x[:, channel:]
-        if training == False:
-            timestep = ((img0[:, :1].clone() * 0 + 1) * timestep).float()
-        else:
-            timestep = timestep.repeat(1, 1, img0.shape[2], img0.shape[3])
+    def forward(self, img0,img1, timestep=0.5, scale_list=[16,8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
+        timestep = (img0[:, :1].clone() * 0 + 1) * timestep
+        timestep = timestep.float()
         f0 = self.encode(img0[:, :3])
         f1 = self.encode(img1[:, :3])
-        flow_list = []
-        merged = []
-        mask_list = []
         warped_img0 = img0
         warped_img1 = img1
         flow = None
         mask = None
-        loss_cons = 0
         block = [self.block0, self.block1, self.block2, self.block3, self.block4]
         for i in range(5):
             if flow is None:
@@ -143,20 +133,17 @@ class IFNet(nn.Module):
                     print("warning: ensemble is not supported since RIFEv4.21")
             else:
                 wf0 = f0**flow[:, 1:2]
-                wf1 = f1**flow[:, 2:3]
+                wf1 = f1**flow[:, 1:2]
                 fd, m0, feat = block[i](torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
                 if ensemble:
                     print("warning: ensemble is not supported since RIFEv4.21")
                 else:
                     mask = m0
                 flow = flow + fd
-            mask_list.append(mask)
-            flow_list.append(flow)
             warped_img0 = img0**flow[:,:3]
             warped_img1 = img1**flow[:,1:4]
-            merged.append((warped_img0, warped_img1))
+
         mask = torch.sigmoid(mask)
-        merged[4] = (warped_img0 * mask + warped_img1 * (1 - mask))
         if not fastmode:
             print('contextnet is removed')
             '''
@@ -166,4 +153,4 @@ class IFNet(nn.Module):
             res = tmp[:, :3] * 2 - 1
             merged[4] = torch.clamp(merged[4] + res, 0, 1)
             '''
-        return flow_list, mask_list[4], merged
+        return warped_img0 * mask + warped_img1 * (1 - mask)

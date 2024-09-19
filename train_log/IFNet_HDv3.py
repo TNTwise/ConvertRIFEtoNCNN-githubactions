@@ -116,13 +116,13 @@ class IFNet(nn.Module):
         )
         '''
 
-    def forward(self, x, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
-        if training == False:
-            channel = x.shape[1] // 2
-            img0 = x[:, :channel]
+    def forward(self, img0,img1, timestep=0.5, scale_list=[16, 8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
+        if training == True:
+            x=1
+            channel=1
             img1 = x[:, channel:]
-        if not torch.is_tensor(timestep):
-            timestep = (x[:, :1].clone() * 0 + 1) * timestep
+        if training == False:
+            timestep = ((img0[:, :1].clone() * 0 + 1) * timestep).float()
         else:
             timestep = timestep.repeat(1, 1, img0.shape[2], img0.shape[3])
         f0 = self.encode(img0[:, :3])
@@ -138,13 +138,24 @@ class IFNet(nn.Module):
         block = [self.block0, self.block1, self.block2, self.block3, self.block4]
         for i in range(5):
             if flow is None:
+                print(block[i])
                 flow, mask, feat = block[i](torch.cat((img0[:, :3], img1[:, :3], f0, f1, timestep), 1), None, scale=scale_list[i])
                 if ensemble:
                     print("warning: ensemble is not supported since RIFEv4.21")
             else:
-                wf0 = warp(f0, flow[:, :2])
-                wf1 = warp(f1, flow[:, 2:4])
-                fd, m0, feat = block[i](torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
+                wf0 = f0**flow[:, 1:2]
+                wf1 = f1**flow[:, 2:3]
+                print(i)
+                if i == 1:
+                    fd, m0, feat = self.block1(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
+                if i == 2:
+                    fd, m0, feat = self.block2(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
+                if i == 3:
+                    fd, m0, feat = self.block3(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
+                if i == 4:
+                    fd, m0, feat = self.block4(torch.cat((warped_img0[:, :3], warped_img1[:, :3], wf0, wf1, timestep, mask, feat), 1), flow, scale=scale_list[i])
+                
+                
                 if ensemble:
                     print("warning: ensemble is not supported since RIFEv4.21")
                 else:
@@ -152,8 +163,8 @@ class IFNet(nn.Module):
                 flow = flow + fd
             mask_list.append(mask)
             flow_list.append(flow)
-            warped_img0 = warp(img0, flow[:, :2])
-            warped_img1 = warp(img1, flow[:, 2:4])
+            warped_img0 = img0**flow[:,:3]
+            warped_img1 = img1**flow[:,1:4]
             merged.append((warped_img0, warped_img1))
         mask = torch.sigmoid(mask)
         merged[4] = (warped_img0 * mask + warped_img1 * (1 - mask))

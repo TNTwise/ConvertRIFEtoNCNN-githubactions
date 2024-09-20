@@ -32,7 +32,7 @@ def modify_rife_hd():
             
                 line = line.replace('flow, mask, merged = self.flownet(imgs, timestep, scale_list)', '''torch.onnx.export(
     self.flownet,
-    (torch.rand(1, 3, 256, 256),torch.rand(1, 3, 256, 256), torch.Tensor([0.5])),
+    (torch.rand(1, 3, 128, 128),torch.rand(1, 3, 128, 128), torch.Tensor([0.5])),
     "rife.onnx",
     verbose=False,
     opset_version=11,

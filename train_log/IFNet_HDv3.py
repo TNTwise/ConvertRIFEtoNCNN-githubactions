@@ -116,15 +116,9 @@ class IFNet(nn.Module):
         )
         '''
 
-    def forward(self, x, timestep=0.5, scale_list=[16, 8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
-        if training == False:
-            channel = x.shape[1] // 2
-            img0 = x[:, :channel]
-            img1 = x[:, channel:]
-        if not torch.is_tensor(timestep):
-            timestep = (x[:, :1].clone() * 0 + 1) * timestep
-        else:
-            timestep = timestep.repeat(1, 1, img0.shape[2], img0.shape[3])
+    def forward(self, img0,img1, timestep=0.5, scale_list=[16, 8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
+        
+        timestep = (x[:, :1].clone() * 0 + 1) * timestep
         f0 = self.encode(img0[:, :3])
         f1 = self.encode(img1[:, :3])
         flow_list = []
@@ -166,4 +160,4 @@ class IFNet(nn.Module):
             res = tmp[:, :3] * 2 - 1
             merged[4] = torch.clamp(merged[4] + res, 0, 1)
             '''
-        return flow_list, mask_list[4], merged
+        return merged[4]

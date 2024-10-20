@@ -116,7 +116,7 @@ class IFNet(nn.Module):
         )
         '''
 
-    def forward(self, img0,img1, timestep=0.5, scale_list=[16, 8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
+    def forward(self, img0,img1, timestep=0.5, scale_list=[32, 16, 8, 4, 1], training=False, fastmode=True, ensemble=False):
         
         timestep = (x[:, :1].clone() * 0 + 1) * timestep
         f0 = self.encode(img0[:, :3])

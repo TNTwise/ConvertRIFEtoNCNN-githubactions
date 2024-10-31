@@ -98,23 +98,6 @@ class IFNet(nn.Module):
         self.block3 = IFBlock(8+4+8+8, c=32)
         self.encode = Head()
 
-        # not used during inference
-	'''
-        self.teacher = IFBlock(8+4+8+3+8, c=64)
-        self.caltime = nn.Sequential(
-            nn.Conv2d(16+9, 8, 3, 2, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(32, 64, 3, 2, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 64, 3, 1, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 64, 3, 1, 1),
-            nn.LeakyReLU(0.2, True),
-            nn.Conv2d(64, 1, 3, 1, 1),
-            nn.Sigmoid()
-        )
-	'''
-
     def forward(self, x, timestep=0.5, scale_list=[8, 4, 2, 1], training=False, fastmode=True, ensemble=False):
         if training == False:
             channel = x.shape[1] // 2
